@@ -50,10 +50,8 @@ public class ViewUsersListCommand implements ActionCommand {
                 request.setAttribute(ATTR_USERS, users);
             }
             page = ConfigurationManager.getProperty("path.page.users");
-        } catch (ServiceException|EnumConstantNotPresentException e) {
-            page = ConfigurationManager.getProperty("path.page.error");
-            request.setAttribute(ATTR_ERROR_MESSAGE,
-                    messageManager.getProperty("message.error.service"));
+        } catch (ServiceException e) {
+            throw new CommandException(e);
         }
         return page;
     }

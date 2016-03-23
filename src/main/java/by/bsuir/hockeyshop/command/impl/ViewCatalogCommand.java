@@ -70,9 +70,7 @@ public class ViewCatalogCommand implements ActionCommand {
             request.setAttribute(PARAM_TYPE, type.toString().toLowerCase());
             page = ConfigurationManager.getProperty("path.page.catalog");
         } catch (ServiceException e) {
-            page = ConfigurationManager.getProperty("path.page.error");
-            request.setAttribute(PARAM_ERROR_MESSAGE,
-                    messageManager.getProperty("message.error.service"));
+            throw new CommandException(e);
         }
         return page;
     }

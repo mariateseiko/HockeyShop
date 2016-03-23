@@ -41,7 +41,7 @@ public class DeleteOrderCommand implements ActionCommand {
             request.getSession().setAttribute(resultAttr, ActionResult.ORDER_DELETED);
             page=COMMAND_VIEW_ORDERS;
         } catch (ServiceException e) {
-            page = ConfigurationManager.getProperty("path.page.error");
+            throw new CommandException(e);
         }
         return page;
     }

@@ -54,7 +54,7 @@ public class CommandStorage {
         return instance;
     }
 
-    public ActionCommand getCommand(HttpServletRequest request){
+    public ActionCommand getCommand(HttpServletRequest request) throws CommandException {
         ActionCommand current = new EmptyCommand();
         String action = request.getParameter("command");
         if (action == null || action.isEmpty()) {
@@ -64,8 +64,9 @@ public class CommandStorage {
             CommandName commandName = CommandName.valueOf(action.toUpperCase());
             current = commands.get(commandName);
         } catch (IllegalArgumentException e) {
-            request.setAttribute("wrongAction", action
-                    + ((MessageManager)(request.getSession().getAttribute(ATTR_MESSAGE_MANAGER))).getProperty("message.wrong.action"));
+            throw new CommandException(e);
+            //request.setAttribute("wrongAction", action
+                   // + ((MessageManager)(request.getSession().getAttribute(ATTR_MESSAGE_MANAGER))).getProperty("message.wrong.action"));
         }
         return current;
     }
@@ -75,12 +76,8 @@ public class CommandStorage {
         if (command == null || command.isEmpty()) {
             return current;
         }
-        try {
-            CommandName commandName = CommandName.valueOf(command.toUpperCase());
-            current = commands.get(commandName);
-        } catch (IllegalArgumentException e) {
-            //TODO log
-    }
+        CommandName commandName = CommandName.valueOf(command.toUpperCase());
+        current = commands.get(commandName);
         return current;
     }
 }

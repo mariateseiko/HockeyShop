@@ -45,7 +45,7 @@ public class AddItemToOrderCommand implements ActionCommand {
             request.getSession().setAttribute(resultAttr, ActionResult.ITEM_ADDED_TO_ORDER);
             page=COMMAND_VIEW_ITEM + itemId;
         } catch (ServiceException e) {
-            page = ConfigurationManager.getProperty("path.page.error");
+            throw new CommandException(e);
         }
         return page;
     }

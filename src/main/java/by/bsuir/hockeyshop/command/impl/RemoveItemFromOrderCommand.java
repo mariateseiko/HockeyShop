@@ -41,7 +41,7 @@ public class RemoveItemFromOrderCommand implements ActionCommand {
             request.getSession().setAttribute(resultAttr, ActionResult.ITEM_REMOVED);
             page=COMMAND_VIEW_ORDER_ITEMS + itemId;
         } catch (ServiceException e) {
-            page = ConfigurationManager.getProperty("path.page.error");
+            throw new CommandException(e);
         }
         return page;
     }

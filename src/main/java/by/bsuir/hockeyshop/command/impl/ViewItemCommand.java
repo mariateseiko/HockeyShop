@@ -49,7 +49,7 @@ public class ViewItemCommand implements ActionCommand {
                     //TODO 404
             }
         } catch (ServiceException e) {
-            page = ConfigurationManager.getProperty("path.page.error");
+            throw new CommandException(e);
         }
         return page;
     }

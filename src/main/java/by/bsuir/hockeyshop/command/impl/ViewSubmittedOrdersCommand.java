@@ -37,7 +37,7 @@ public class ViewSubmittedOrdersCommand implements ActionCommand {
     @Override
     public String execute(HttpServletRequest request) throws CommandException {
         String page;
-        List<Order> orders;
+        List<Order> orders = null;
         MessageManager messageManager = (MessageManager)(request.getSession().getAttribute(ATTR_MESSAGE_MANAGER));
         try {
             String orderType = request.getParameter(PARAM_TYPE);
@@ -62,8 +62,6 @@ public class ViewSubmittedOrdersCommand implements ActionCommand {
                 case ALL:
                     orders = ORDER_SERVICE.getAllOrders((pageNumber-1)*MAX_ORDERS_PER_PAGE, MAX_ORDERS_PER_PAGE);
                     break;
-                default:
-                    throw new EnumConstantNotPresentException(OrderType.class, orderType);
             }
             if (orders == null) {
                 request.setAttribute(PARAM_NO_ORDERS_MESSAGE,
@@ -72,10 +70,8 @@ public class ViewSubmittedOrdersCommand implements ActionCommand {
                 request.setAttribute(ATTR_ORDERS, orders);
             }
             page = ConfigurationManager.getProperty("path.page.orders");
-        } catch (ServiceException |EnumConstantNotPresentException e) {
-            page = ConfigurationManager.getProperty("path.page.error");
-            request.setAttribute(PARAM_ERROR_MESSAGE,
-                    messageManager.getProperty("message.error.service") + e.getCause().getCause());
+        } catch (ServiceException e) {
+            throw new CommandException(e);
         }
         return page;
     }

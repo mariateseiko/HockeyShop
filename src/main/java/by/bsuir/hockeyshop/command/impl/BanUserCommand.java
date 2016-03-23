@@ -52,7 +52,6 @@ public class BanUserCommand implements ActionCommand {
                     request.setAttribute(ATTR_ERROR, messageManager.getProperty("message.ban.error"));
                 } else {
                     request.setAttribute(ATTR_ERROR, messageManager.getProperty("message.unban.error"));
-
                 }
             }
             page = CommandStorage.getInstance().getCommand(VIEW_USER_COMMAND).execute(request);

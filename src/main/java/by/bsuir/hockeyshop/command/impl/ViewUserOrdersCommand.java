@@ -67,12 +67,10 @@ public class ViewUserOrdersCommand implements ActionCommand {
             }
             switch (OrderType.valueOf(orderType.toUpperCase())) {
                 case PAID:
-                    boolean isPayed = true;
                     orders = ORDER_SERVICE.getOrdersByUser(userId, true,
                             (pageNumber-1)*MAX_ORDERS_PER_PAGE, MAX_ORDERS_PER_PAGE);
                     break;
                 case UNPAID:
-                    isPayed = false;
                     orders = ORDER_SERVICE.getOrdersByUser(userId,
                             false, (pageNumber-1)*MAX_ORDERS_PER_PAGE, MAX_ORDERS_PER_PAGE);
                     break;
@@ -89,9 +87,7 @@ public class ViewUserOrdersCommand implements ActionCommand {
             request.setAttribute(ATTR_ORDER_TYPE, orderType);
             page = ConfigurationManager.getProperty("path.page.orders");
         } catch (ServiceException|EnumConstantNotPresentException e) {
-            page = ConfigurationManager.getProperty("path.page.error");
-            request.setAttribute(PARAM_ERROR_MESSAGE,
-                    messageManager.getProperty("message.error.service"));
+            throw new CommandException(e);
         }
         return page;
     }

@@ -39,6 +39,12 @@ header {
     height: 100%;
     background-size: cover;
 }
+
+#error-page {
+    background: url("../images/tears.jpg") no-repeat;
+    height: 100%;
+    background-size: cover;
+}
 #wrapper {
     text-align:center;
     overflow: hidden;
@@ -160,9 +166,18 @@ header h2 span {
     left: 37%;
     width:25%;
 	position: absolute;
-	background: #212121;
+    background: rgba(0,0,0,0.9);
 }
 
+.error-container {
+    left: 37%;
+    width:25%;
+    position: absolute;
+    top: 35%;
+    text-align: center;
+    font-weight: 700;
+    font-size: 20px;
+}
 .popupContainer#login_container {
     top: 25%;
 }

@@ -29,25 +29,23 @@ public class Controller extends HttpServlet {
     private void processRequest(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String page;
         CommandStorage storage = CommandStorage.getInstance();
-        ActionCommand command = storage.getCommand(req);
         try {
+            ActionCommand command = storage.getCommand(req);
             page = command.execute(req);
-        } catch (CommandException e) {
-            page = ConfigurationManager.getProperty("path.page.systemerror");
-            RequestDispatcher dispatcher = getServletContext().getRequestDispatcher(page);
-            dispatcher.forward(req, resp);
-        }
-
-        if (page != null) {
-            if(req.getMethod().equalsIgnoreCase("get")){
-                RequestDispatcher dispatcher = getServletContext().getRequestDispatcher(page);
-                dispatcher.forward(req, resp);
+            if (page != null) {
+                if (req.getMethod().equalsIgnoreCase("get")) {
+                    RequestDispatcher dispatcher = getServletContext().getRequestDispatcher(page);
+                    dispatcher.forward(req, resp);
+                } else {
+                    resp.sendRedirect(req.getContextPath() + page);
+                }
             } else {
-                resp.sendRedirect(req.getContextPath()+page);
+                page = req.getHeader("Referer");
+                resp.sendRedirect(page);
             }
-        } else {
-            page = req.getHeader("Referer");
-            resp.sendRedirect(page);}
+        } catch(CommandException e) {
+            throw new ServletException(e);
         }
     }
+}
 

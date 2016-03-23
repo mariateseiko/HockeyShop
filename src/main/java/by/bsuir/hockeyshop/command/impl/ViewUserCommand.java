@@ -39,7 +39,7 @@ public class ViewUserCommand implements ActionCommand {
             }
             page = ConfigurationManager.getProperty("path.page.user");
         } catch (ServiceException e) {
-            page = ConfigurationManager.getProperty("path.page.error");
+            throw new CommandException(e);
         }
         return page;
     }
