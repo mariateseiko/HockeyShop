@@ -1,0 +1,454 @@
+@import url(https://fonts.googleapis.com/css?family=Raleway:400,500,800);
+* {
+    margin: 0;
+    padding: 0;
+    border: 0;
+}
+a {
+    style: none;
+    color: inherit;
+}
+.horiz-nav {
+    float: left;
+}
+body {
+    background-color: #212121;
+    font-family: 'Raleway', Arial, sans-serif;   
+    color: white;
+}
+
+.cover {
+    height: 100%;
+    background: rgba(0,0,0, 0.8);   
+}
+
+.header-image {
+    
+    height: 250px;
+    background-size: cover;
+    background: url("../images/Locker.jpg") no-repeat center;
+    
+}
+header {
+    width: 100%;
+    background: rgba(0,0,0, 0.8);
+    
+}
+#login_back {
+    background: url("../images/hug2.jpg") no-repeat center center fixed;
+    height: 100%;
+    background-size: cover;
+}
+#wrapper {
+    text-align:center;
+    overflow: hidden;
+    margin: 0 auto;
+   position: relative;
+    padding: 0 33%;
+    top: 20%;
+}
+#wrapper span{
+   
+   text-transform: uppercase;
+  font-weight: 700;  
+}
+.about span h3 {
+    text-transform: uppercase; 
+   text-align: center;
+    color: #d44004;
+}
+
+.about span h4 {
+    text-transform: uppercase;
+    text-align: center;
+    color: #d44004;
+}
+.about span h4 button {
+    padding: 2px;
+    background-color: #212121;
+}
+.about  {
+    margin-top: 3px;
+    border-top: 3px solid #d44004;
+    border-bottom: 3px solid #d44004;
+    color: #212121;
+    padding: 8px 18px;
+    background: white;
+    
+}
+.cat-nav:hover img,
+.cat-nav.hover img {
+  transform: scale(1.5);
+}
+.cat-nav img{
+  transition: all 1s ease;
+  vertical-align: bottom;
+  max-width: 100%;
+  width: 100%;
+}
+
+#acc-nav img{
+  transform-origin: 30% 50%;
+}
+
+#skater-nav img {
+    transform-origin: 60% 40%;
+}
+
+#goalie-nav img {
+    transform-origin: 70% 10%;
+}
+.cat-nav {
+    max-width: 22%;
+    overflow: hidden;
+    position: relative;
+    float: left;
+    margin-left: 11%;
+    border: 4px solid #d44004;
+    border-radius: 3px;
+}
+.cat-nav:nth-of-type(1) {
+    margin-left: 5.25%;
+}
+.nav-button {
+    position: absolute;
+    top: 0;
+    border-top-right-radius: 0;
+    border-top-left-radius: 0;
+}
+.para {
+    margin:  8px auto;
+    padding: 0 5.5%;
+    font-size: 1.0em;
+    line-height: 1.2em;
+    text-align: justify;
+    text-indent: 25px;
+    font-weight: 700;
+}
+
+ button {
+  border:  none;
+  border-radius: 5px;
+  padding: 5px 10px;
+  background-color: #d44004;
+  font-weight: 800;
+  color: #ffffff;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  font-size: 0.8em;
+}
+
+.test {
+    background: rgba(0,0,0,0.9);
+    padding: 15px 20px;
+    border-radius: 15px;
+}
+header h2 {
+  display: table;
+  margin: 0 auto;
+  padding: 0 10px;
+  position: relative;
+  text-transform: uppercase;
+  font-weight: 400;
+}
+header h2 span {
+  font-weight: 800;
+}
+
+.popupContainer{
+    border: 3px solid #9b400f;
+    left: 37%;
+    width:25%;
+	position: absolute;
+	background: #212121;
+}
+
+.popupContainer#login_container {
+    top: 25%;
+}
+
+.popupContainer#register_container {
+    top: 20%;
+}
+
+.center {
+    text-align: center;
+}
+
+.popupHeader {font-size:16px; text-transform: uppercase; width: auto;}
+.popupHeader {background:#d44004; position:relative; padding:10px 20px;  font-weight:bold; color:#212121}
+
+.popupBody {padding:20px;}
+
+.user_login label {
+    display: block;
+    margin-bottom:5px;
+}
+.user_login input {
+    display: block;
+    width:100%;
+    padding: 10px;
+    border:1px solid #d44004;
+    border-radius: 3px;
+}
+
+
+.user_register label {
+    display: block;
+    margin-bottom:5px;
+}
+.user_register input {
+    display: block;
+    width:100%;
+    padding: 10px;
+    border:1px solid #d44004;
+    border-radius: 3px;
+}
+#logo_client {
+    height: 15px;
+    float: left;
+}
+.error_message {
+    text-transform: uppercase;
+    font-weight: 700;
+    font-size: 16px;
+    color: #04b5d4;
+    margin-top: 10px;
+    text-align:center;
+}
+
+.form-container {
+    color: aqua;
+}
+/*-------------Input forms-------------------*/
+
+.input-form input, select, textarea {
+    width:40%;
+    padding: 10px;
+    border:2px solid #04b5d4;
+    border-radius: 5px;
+    margin: 0 auto;
+    overflow-y: hidden;
+}
+.input-form input:last-of-type {
+    margin-bottom: 10px;
+}
+.input-form label {
+    display: block;
+    margin-top: 10px;
+    color: #d44004;
+    font-weight: 800;
+    text-transform: uppercase;
+    font-size: 14px;
+
+}/*-------------Catalog------------------------------*/
+
+.item-image {
+    height: 125px;
+    width: 125px;
+    float:left;
+}
+
+.item-info {
+    font-weight: 500;
+    width: 150px;
+    margin-top: 10px;
+    margin-right: 10px;
+    float:right;
+}
+
+.item-name {
+    font-weight: 700;
+    margin-bottom: 5px;
+    height: 38px;
+}
+#catalog{
+    background-color: #212121;
+}
+.info-label {
+    text-transform:uppercase;
+    font-weight: 800;
+    font-size: 15px;
+    color: #212121;
+    float: left;
+}
+.info-value {
+    float:right;
+    font-size: 14px;
+}
+
+.price {
+    font-weight: 700;
+    color: #04b5d4;
+    text-align: center;
+}
+
+.info {
+    margin-bottom: 5px;
+}
+
+.read-more {
+    bottom: 0;
+    right: 0;
+    border-bottom-left-radius: 0;
+    margin-top: 22px;
+    margin-left: 40px;
+    margin-right: -10px;
+    width: 130px;
+}
+.item-wrapper {
+    display: inline-block;
+}
+.item {
+    height: 170px;
+    border: 3px solid #d44004;
+    width: 300px;
+    border-radius: 5px;
+    margin-top: 7px;
+    text-align: center;
+    background-color: #ffffff;
+}
+.pagination {
+    margin-top: 10px;
+    text-align: center;
+}
+.pagination  button{
+    display: inline-block;
+    background-color: #212121;
+}
+
+button.active  {
+    display: inline-block;
+    background-color: #d44004;;
+}
+
+.pagination  button:hover{
+    background-color: #04b5d4;
+    text-align: center;
+}
+
+.item-container {
+    text-align: center;
+    background-color: #212121;
+}
+/*--------------------Item Info --------------------------*/
+.item-image-big {
+    width: 280px;
+    float: left;
+    margin-left: 15px;
+}
+
+.item-wrapper-big .item {
+    height: 340px;
+    width: 55%;
+    margin: 0 auto;
+    position: relative;
+    border-radius: 0;
+}
+
+.item-wrapper-big .item-info {
+    width: 300px;
+}
+.item-wrapper-big {
+    margin-top: 10px;
+}
+#desc {
+    text-indent: 15px;
+    text-align: justify;
+    letter-spacing: -0.5px;
+}
+
+.info-label-desc{
+    text-align: center;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+.plus, .minus {
+    width: 30px;
+}
+
+.quant {
+    font-size: 16px;
+    font-weight: 600;
+    text-transform: uppercase;
+
+}
+.number {
+    position: absolute;
+    bottom:0;
+    right: 0;
+    padding: 0;
+    margin: 0;
+}
+
+.number button {
+    border-radius: 5px 5px 0 0;
+
+}
+
+#add {
+    border-top-right-radius: 0;
+}
+
+.q-input {
+    width:20px;
+    font-size: 18px;
+    text-align: center;
+}
+
+#update-form  {
+    width: auto;
+    margin: 10px auto;
+}
+
+.payment {
+    border: 2px solid #d44004;
+    border-radius: 3px;
+    width: 55%;
+    margin: 10px auto;
+}
+
+.orders {
+    width: 100%;
+    color: white;
+    text-align: center;
+    text-transform: uppercase;
+    font-weight: 700;
+    background-color: #212121;
+}
+
+.headings {
+    color: #d44004;
+}
+
+.payment button {
+    margin: 5px auto;
+}
+
+.user-info {
+    margin: 0 auto;
+    width: 50%;
+}
+
+.user{
+    height: 210px;
+    border: 3px solid #d44004;
+    border-radius: 5px;
+    text-align: center;
+    background-color: #ffffff;
+    width: 55%;
+    margin: 7px auto;
+    position: relative;
+}
+
+.user-info .info-value {
+    font-weight: 500;
+}
+
+span h4 button:hover {
+    color: #04b5d4;
+}
+.about span h4 .active {
+    text-decoration: overline;
+}
