@@ -13,7 +13,6 @@ public class CommandStorage {
     private static CommandStorage instance;
     private static AtomicBoolean isNull = new AtomicBoolean(true);
     private static ReentrantLock lock = new ReentrantLock();
-    static final String ATTR_MESSAGE_MANAGER = "messageManager";
 
     private CommandStorage(){
         commands.put(CommandName.LOGIN, new LoginCommand());

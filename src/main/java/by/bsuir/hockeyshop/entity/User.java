@@ -139,4 +139,15 @@ public class User extends Entity {
         this.banned = banned;
     }
 
+    @Override
+    public String toString() {
+        return "User{" +
+                "login='" + login + '\'' +
+                ", password='" + password + '\'' +
+                ", email='" + email + '\'' +
+                ", role=" + role +
+                ", phone='" + phone + '\'' +
+                ", banned=" + banned +
+                '}';
+    }
 }

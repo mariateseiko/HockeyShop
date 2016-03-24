@@ -6,7 +6,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Validator {
-    static final String REGEXP_LOGIN = "[A-z]\\w{4,14}";
+    static final String REGEXP_LOGIN = "[A-z]\\w{3,14}";
     static final String REGEXP_PASSWORD = "[A-z0-9]\\w{5,19}";
     static final String REGEXP_EMAIL  = "(\\w+)@(\\w+\\.)([a-z]{1,4})";
     static final String REGEXP_PHONE  = "(\\d){4,20}";

@@ -45,6 +45,12 @@ header {
     height: 100%;
     background-size: cover;
 }
+
+#error-page-404 {
+    background: url("../images/404.jpg") no-repeat;
+    height: 100%;
+    background-size: cover;
+}
 #wrapper {
     text-align:center;
     overflow: hidden;

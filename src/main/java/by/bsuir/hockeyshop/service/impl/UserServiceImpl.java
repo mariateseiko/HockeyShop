@@ -14,12 +14,12 @@ import by.bsuir.hockeyshop.util.Hasher;
 import java.util.List;
 
 public class UserServiceImpl implements UserService {
-    private static UserDao userDao;
+    private static UserDao userDao = UserDaoImpl.getInstance();
     private static OrderDao orderDao;
     private static UserService instance = new UserServiceImpl();
 
     private UserServiceImpl() {
-        userDao = UserDaoImpl.getInstance();
+       // userDao = UserDaoImpl.getInstance();
         orderDao = OrderDaoImpl.getInstance();
     }
 
