@@ -37,7 +37,7 @@ public class ViewItemCommand implements ActionCommand {
         Item item;
         long itemId = Long.parseLong(request.getParameter(PARAM_ITEM_ID));
         try {
-            if ((item = ITEM_SERVICE.getItem(itemId)) != null) {
+            if ((item = ITEM_SERVICE.selectItem(itemId)) != null) {
                 request.setAttribute(ATTR_ITEM, item);
                 String lastPage = request.getParameter(PARAM_LAST_PAGE);
                 String dir = request.getParameter(PARAM_DIRECTION);

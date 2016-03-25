@@ -17,6 +17,7 @@ import javax.servlet.http.HttpServletRequest;
  */
 public class BanUserCommand implements ActionCommand {
     static final String ATTR_USER = "user";
+    static final String PARAM_USER_ID = "id";
     static final String PARAM_LOGIN_ERROR_MESSAGE = "loginErrorMessage";
     static final UserService userService = UserServiceImpl.getInstance();
     static final String ATTR_MESSAGE_MANAGER = "messageManager";
@@ -35,12 +36,11 @@ public class BanUserCommand implements ActionCommand {
     @Override
     public String execute(HttpServletRequest request) throws CommandException {
         String page;
-        User user = (User)(request.getSession().getAttribute(ATTR_USER));
-        //TODO something is strange, check out after a proper sleep
-        Boolean ban = (Boolean)(request.getAttribute(ATTR_BAN));
+        Long id = Long.parseLong(request.getParameter(PARAM_USER_ID));
+        Boolean ban = Boolean.parseBoolean(request.getParameter(ATTR_BAN));
         MessageManager messageManager = (MessageManager)(request.getSession().getAttribute(ATTR_MESSAGE_MANAGER));
         try {
-            if (userService.changeUserBanStatus(user.getId(), ban)) {
+            if (userService.changeUserBanStatus(id, ban)) {
                 if (ban) {
                     request.setAttribute(ATTR_SUCCESS, messageManager.getProperty("message.ban.success"));
                 } else {

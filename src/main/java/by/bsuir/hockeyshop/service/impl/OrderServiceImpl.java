@@ -26,7 +26,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public List<Order> getOrdersByUser(long userId, int offset, int limit) throws ServiceException {
+    public List<Order> selectOrdersByUser(long userId, int offset, int limit) throws ServiceException {
         try {
             return orderDao.selectOrdersByUserId(userId, offset, limit);
         } catch (DaoException e) {
@@ -35,7 +35,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public List<Order> getOrdersByUser(long userId, boolean payed, int offset, int limit) throws ServiceException {
+    public List<Order> selectOrdersByUser(long userId, boolean payed, int offset, int limit) throws ServiceException {
         List<Order> orders;
         try {
             if (payed) {
@@ -50,7 +50,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public List<Order> getAllOrders(int offset, int limit) throws ServiceException {
+    public List<Order> selectAllOrders(int offset, int limit) throws ServiceException {
         List<Order> orders;
         try {
             orders = orderDao.selectAllOrders(offset, limit);
@@ -61,7 +61,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public List<Order> getAllOrdersByPayment(boolean isPayed, int offset, int limit) throws ServiceException {
+    public List<Order> selectAllOrdersByPayment(boolean isPayed, int offset, int limit) throws ServiceException {
         List<Order> orders;
         try {
             if (isPayed) {

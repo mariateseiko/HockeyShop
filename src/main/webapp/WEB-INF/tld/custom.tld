@@ -11,4 +11,14 @@
         <tag-class>by.bsuir.hockeyshop.tag.MenuTag</tag-class>
         <body-content>empty</body-content>
     </tag>
+    <tag>
+        <name>orderdate</name>
+        <tag-class>by.bsuir.hockeyshop.tag.OrderDateTimeTag</tag-class>
+        <attribute>
+            <name>calendar</name>
+            <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+        <body-content>empty</body-content>
+    </tag>
 </taglib>

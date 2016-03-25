@@ -52,15 +52,15 @@ public class ViewSubmittedOrdersCommand implements ActionCommand {
             }
             switch (OrderType.valueOf(orderType.toUpperCase())) {
                 case PAID:
-                    orders = ORDER_SERVICE.getAllOrdersByPayment(true,
-                            (pageNumber-1)*MAX_ORDERS_PER_PAGE, MAX_ORDERS_PER_PAGE);
+                    orders = ORDER_SERVICE.selectAllOrdersByPayment(true,
+                            (pageNumber - 1) * MAX_ORDERS_PER_PAGE, MAX_ORDERS_PER_PAGE);
                     break;
                 case UNPAID:
-                    orders = ORDER_SERVICE.getAllOrdersByPayment(false,
-                            (pageNumber-1)*MAX_ORDERS_PER_PAGE, MAX_ORDERS_PER_PAGE);
+                    orders = ORDER_SERVICE.selectAllOrdersByPayment(false,
+                            (pageNumber - 1) * MAX_ORDERS_PER_PAGE, MAX_ORDERS_PER_PAGE);
                     break;
                 case ALL:
-                    orders = ORDER_SERVICE.getAllOrders((pageNumber-1)*MAX_ORDERS_PER_PAGE, MAX_ORDERS_PER_PAGE);
+                    orders = ORDER_SERVICE.selectAllOrders((pageNumber - 1) * MAX_ORDERS_PER_PAGE, MAX_ORDERS_PER_PAGE);
                     break;
             }
             if (orders == null) {

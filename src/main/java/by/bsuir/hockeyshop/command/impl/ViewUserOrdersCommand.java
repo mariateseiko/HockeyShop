@@ -67,16 +67,16 @@ public class ViewUserOrdersCommand implements ActionCommand {
             }
             switch (OrderType.valueOf(orderType.toUpperCase())) {
                 case PAID:
-                    orders = ORDER_SERVICE.getOrdersByUser(userId, true,
-                            (pageNumber-1)*MAX_ORDERS_PER_PAGE, MAX_ORDERS_PER_PAGE);
+                    orders = ORDER_SERVICE.selectOrdersByUser(userId, true,
+                            (pageNumber - 1) * MAX_ORDERS_PER_PAGE, MAX_ORDERS_PER_PAGE);
                     break;
                 case UNPAID:
-                    orders = ORDER_SERVICE.getOrdersByUser(userId,
-                            false, (pageNumber-1)*MAX_ORDERS_PER_PAGE, MAX_ORDERS_PER_PAGE);
+                    orders = ORDER_SERVICE.selectOrdersByUser(userId,
+                            false, (pageNumber - 1) * MAX_ORDERS_PER_PAGE, MAX_ORDERS_PER_PAGE);
                     break;
                 default:
-                    orders = ORDER_SERVICE.getOrdersByUser(userId,
-                            (pageNumber-1)*MAX_ORDERS_PER_PAGE, MAX_ORDERS_PER_PAGE);
+                    orders = ORDER_SERVICE.selectOrdersByUser(userId,
+                            (pageNumber - 1) * MAX_ORDERS_PER_PAGE, MAX_ORDERS_PER_PAGE);
             }
             if (orders == null) {
                 request.setAttribute(PARAM_NO_ORDERS_MESSAGE,

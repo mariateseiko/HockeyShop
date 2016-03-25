@@ -71,12 +71,12 @@
           <c:if test="${user.getRole().toString().equalsIgnoreCase('admin')}">
             <td>${order.getUser().getLogin()}</td>
           </c:if>
-          <td><fmt:formatDate value="${order.getCreationDateTime().getTime()}" type="both" timeStyle="medium"/></td>
+          <td><ctg:orderdate calendar="${order.creationDateTime}"/></td>
           <td>
             <c:if test="${empty order.getPaymentDateTime()}">
               <fmt:message key="label.order.not.payed"/>
             </c:if>
-            <fmt:formatDate value="${order.getPaymentDateTime().getTime()}" type="both" timeStyle="medium"/>
+            <ctg:orderdate calendar="${order.getPaymentDateTime()}"/>
           </td>
           <td>${order.getCountOfItems()}</td>
           <td>${order.getPaymentSum()}</td>

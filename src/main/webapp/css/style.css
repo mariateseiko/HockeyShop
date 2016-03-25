@@ -185,10 +185,12 @@ header h2 span {
     font-size: 20px;
 }
 .popupContainer#login_container {
+    background-color: #212121;
     top: 25%;
 }
 
 .popupContainer#register_container {
+    background-color: #212121;
     top: 20%;
 }
 

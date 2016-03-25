@@ -43,7 +43,7 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
-    public List<Item> getItemsByTypeSortedByPriceAsc(ItemType type, int offset, int limit) throws ServiceException {
+    public List<Item> selectItemsByTypeSortedByPriceAsc(ItemType type, int offset, int limit) throws ServiceException {
         try {
             String itemType = type.toString();
             return itemDao.selectItemsByTypeOrderedByPriceAsc(itemType, offset, limit);
@@ -53,7 +53,7 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
-    public List<Item> getItemsByTypeSortedByPriceDesc(ItemType type, int offset, int limit) throws ServiceException {
+    public List<Item> selectItemsByTypeSortedByPriceDesc(ItemType type, int offset, int limit) throws ServiceException {
         try {
             String itemType = type.toString();
             return itemDao.selectItemsByTypeOrderedByPriceDesc(itemType, offset, limit);
@@ -63,7 +63,7 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
-    public Item getItem(long id) throws ServiceException {
+    public Item selectItem(long id) throws ServiceException {
         Item item;
         try {
             item = itemDao.selectItemById(id);
@@ -79,7 +79,7 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
-    public int getItemsCountByType(ItemType type) throws ServiceException {
+    public int selectItemsCountByType(ItemType type) throws ServiceException {
         try {
             return itemDao.selectItemsCountByType(type.toString());
         } catch (DaoException e) {

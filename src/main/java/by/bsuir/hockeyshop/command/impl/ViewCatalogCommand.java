@@ -49,7 +49,7 @@ public class ViewCatalogCommand implements ActionCommand {
         try {
             ItemType type = ItemType.valueOf(request.getParameter(PARAM_TYPE).toUpperCase());
             pageNumber = definePageNumber(request);
-            totalNumberOfItems = ITEM_SERVICE.getItemsCountByType(type);
+            totalNumberOfItems = ITEM_SERVICE.selectItemsCountByType(type);
             totalNumberOfPages = defineTotalNumberOfPages(totalNumberOfItems);
             if (totalNumberOfItems > 0 && pageNumber <= totalNumberOfPages) {
                 String direction = defineDirection(request);
@@ -106,9 +106,9 @@ public class ViewCatalogCommand implements ActionCommand {
         List<Item> items;
         int offset = (pageNumber - 1) * MAX_ITEMS_PER_PAGE;
         if (DESC_DIRECTION.equals(direction)) {
-            items = ITEM_SERVICE.getItemsByTypeSortedByPriceDesc(type, offset, MAX_ITEMS_PER_PAGE);
+            items = ITEM_SERVICE.selectItemsByTypeSortedByPriceDesc(type, offset, MAX_ITEMS_PER_PAGE);
         } else {
-            items = ITEM_SERVICE.getItemsByTypeSortedByPriceAsc(type, offset,  MAX_ITEMS_PER_PAGE);
+            items = ITEM_SERVICE.selectItemsByTypeSortedByPriceAsc(type, offset, MAX_ITEMS_PER_PAGE);
         }
         return items;
     }
