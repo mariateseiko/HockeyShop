@@ -25,16 +25,16 @@
           <ul class="cd-dropdown-content">
             <li class="cd-divider"><fmt:message key="label.orders"/></li>
             <li>
-              <a href="controller?command=view_user_orders"><fmt:message key="label.orders.all"/></a>
+              <a href="${pageContext.request.contextPath}/controller?command=view_user_orders"><fmt:message key="label.orders.all"/></a>
             </li>
             <li>
-              <a href="controller?command=view_user_orders&type=paid"><fmt:message key="label.orders.paid"/></a>
+              <a href="${pageContext.request.contextPath}/controller?command=view_user_orders&type=paid"><fmt:message key="label.orders.paid"/></a>
             </li>
             <li>
-              <a href="controller?command=view_user_orders&type=unpaid"><fmt:message key="label.orders.unpaid"/></a>
+              <a href="${pageContext.request.contextPath}/controller?command=view_user_orders&type=unpaid"><fmt:message key="label.orders.unpaid"/></a>
             </li>
             <li class="cd-divider"></li>
-            <li><a href="controller?command=logout"><fmt:message key="label.logout"/></a></li>
+            <li><a href="${pageContext.request.contextPath}/controller?command=logout"><fmt:message key="label.logout"/></a></li>
           </ul>
         </nav>
       </div>
@@ -45,8 +45,8 @@
     <div class="heading">
       <a href="${pageContext.request.contextPath}/index.jsp"><h2>Hockey<span>Corner</span></h2></a>
     </div>
-
   </header>
+
   <div id="wrapper">
     <div class="test">
         <span><fmt:message key="label.header.first"/></span>

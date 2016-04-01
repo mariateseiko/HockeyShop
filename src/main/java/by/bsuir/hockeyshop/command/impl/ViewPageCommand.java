@@ -45,6 +45,9 @@ public class ViewPageCommand implements ActionCommand {
                         break;
                     case ITEM_ADDED_TO_CATALOG:
                         message = messageManager.getProperty("message.item.add.error");
+                        break;
+                    case VALIDATION_FAILED:
+                        message = messageManager.getProperty("message.item.add.validation.error");
                 }
             }
             request.setAttribute(ATTR_ERROR, message);

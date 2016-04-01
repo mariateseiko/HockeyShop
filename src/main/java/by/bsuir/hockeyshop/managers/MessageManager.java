@@ -7,8 +7,8 @@ public enum MessageManager {
     EN("en-US"), RU("ru-RU");
     private ResourceBundle resourceBundle;
 
-    MessageManager(String locale) {
-        resourceBundle = ResourceBundle.getBundle("message", Locale.forLanguageTag(locale));
+    MessageManager(String localeString) {
+        resourceBundle = ResourceBundle.getBundle("message", Locale.forLanguageTag(localeString));
     }
 
     public String getProperty(String key) {

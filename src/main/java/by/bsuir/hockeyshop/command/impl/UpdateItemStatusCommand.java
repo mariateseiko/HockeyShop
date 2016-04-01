@@ -38,7 +38,7 @@ public class UpdateItemStatusCommand implements ActionCommand {
             if (ITEM_SERVICE.updateItemStatus(itemId, status)) {
                 resultAttr = ATTR_SUCCESS;
             }
-            request.getSession().setAttribute(resultAttr, ActionResult.ORDER_SUBMITTED);
+            request.getSession().setAttribute(resultAttr, ActionResult.STATUS_UPDATED);
             page = COMMAND_VIEW_ITEM + itemId;
         } catch (ServiceException e) {
             throw new CommandException(e);

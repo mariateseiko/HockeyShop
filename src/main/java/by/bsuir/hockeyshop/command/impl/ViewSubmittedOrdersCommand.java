@@ -3,6 +3,7 @@ package by.bsuir.hockeyshop.command.impl;
 import by.bsuir.hockeyshop.command.ActionCommand;
 import by.bsuir.hockeyshop.command.CommandException;
 import by.bsuir.hockeyshop.entity.Order;
+import by.bsuir.hockeyshop.entity.OrderType;
 import by.bsuir.hockeyshop.managers.ConfigurationManager;
 import by.bsuir.hockeyshop.managers.MessageManager;
 import by.bsuir.hockeyshop.service.OrderService;
@@ -74,9 +75,5 @@ public class ViewSubmittedOrdersCommand implements ActionCommand {
             throw new CommandException(e);
         }
         return page;
-    }
-
-    enum OrderType {
-        PAID, UNPAID, ALL
     }
 }

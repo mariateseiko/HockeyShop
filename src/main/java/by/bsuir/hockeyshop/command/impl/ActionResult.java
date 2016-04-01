@@ -11,5 +11,6 @@ public enum ActionResult {
     ORDER_PAID,
     STATUS_UPDATED,
     PRICE_UPDATED,
-    ORDER_SUBMITTED
+    ORDER_SUBMITTED,
+    VALIDATION_FAILED
 }

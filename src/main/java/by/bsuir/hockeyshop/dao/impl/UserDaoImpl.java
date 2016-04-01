@@ -80,10 +80,8 @@ public class UserDaoImpl implements UserDao {
             st.setString(1, user.getLogin());
             st.setString(2, user.getPassword());
             st.setString(3, user.getEmail());
-            st.setInt(4, getRoleIdByName(user.getRole().toString().toUpperCase()));
-            if (st.executeUpdate() == 0) {
-                return false;
-            }
+            st.setInt(4, selectRoleIdByName(user.getRole().toString().toUpperCase()));
+            st.executeUpdate();
         } catch (SQLIntegrityConstraintViolationException e) {
             return false;
         } catch (SQLException e) {
@@ -92,7 +90,7 @@ public class UserDaoImpl implements UserDao {
         return true;
     }
 
-    int getRoleIdByName(String name) throws DaoException {
+    int selectRoleIdByName(String name) throws DaoException {
         try (Connection cn = ConnectionPool.getInstance().takeConnection();
             PreparedStatement st = cn.prepareStatement(GET_ROLE_ID_BY_NAME)) {
             st.setString(1, name);

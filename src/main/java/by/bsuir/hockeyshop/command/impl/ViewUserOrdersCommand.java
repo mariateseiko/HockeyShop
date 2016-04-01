@@ -3,6 +3,7 @@ package by.bsuir.hockeyshop.command.impl;
 import by.bsuir.hockeyshop.command.ActionCommand;
 import by.bsuir.hockeyshop.command.CommandException;
 import by.bsuir.hockeyshop.entity.Order;
+import by.bsuir.hockeyshop.entity.OrderType;
 import by.bsuir.hockeyshop.entity.User;
 import by.bsuir.hockeyshop.entity.UserRole;
 import by.bsuir.hockeyshop.managers.ConfigurationManager;
@@ -86,13 +87,9 @@ public class ViewUserOrdersCommand implements ActionCommand {
             }
             request.setAttribute(ATTR_ORDER_TYPE, orderType);
             page = ConfigurationManager.getProperty("path.page.orders");
-        } catch (ServiceException|EnumConstantNotPresentException e) {
+        } catch (ServiceException e) {
             throw new CommandException(e);
         }
         return page;
-    }
-
-    enum OrderType {
-        PAID, UNPAID, ALL
     }
 }

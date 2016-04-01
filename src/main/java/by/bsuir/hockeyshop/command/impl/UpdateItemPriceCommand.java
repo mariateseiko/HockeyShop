@@ -37,7 +37,7 @@ public class UpdateItemPriceCommand implements ActionCommand {
             if (ITEM_SERVICE.updateItemPrice(itemId, price)) {
                 resultAttr = ATTR_SUCCESS;
             }
-            request.getSession().setAttribute(resultAttr, ActionResult.ORDER_SUBMITTED);
+            request.getSession().setAttribute(resultAttr, ActionResult.PRICE_UPDATED);
             page = COMMAND_VIEW_ITEM + itemId;
         } catch (ServiceException e) {
             throw new CommandException(e);

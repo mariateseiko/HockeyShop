@@ -9,6 +9,7 @@ import by.bsuir.hockeyshop.service.ServiceException;
 import by.bsuir.hockeyshop.managers.ConfigurationManager;
 import by.bsuir.hockeyshop.service.ItemService;
 import by.bsuir.hockeyshop.service.impl.ItemServiceImpl;
+import by.bsuir.hockeyshop.util.Validator;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -56,24 +57,28 @@ public class NewItemCommand implements ActionCommand {
         item.setStatus(ItemStatus.valueOf(request.getParameter(PARAM_STATUS).toUpperCase()));
         item.setAdditionalInfo(request.getParameter(PARAM_ADDITIONAL));
         item.setDescription(request.getParameter(PARAM_DESCRIPTION));
-        try {
-            if(request.getParts().size() > 0) {
-                item.setImagePath(uploadImage(request));
+        if (Validator.validateItem(item)) {
+            try {
+                if (request.getParts().size() > 0) {
+                    item.setImagePath(uploadImage(request));
+                }
+            } catch (ServletException | IOException | CommandException e) {
+                throw new CommandException(e);
             }
-        } catch (ServletException|IOException|CommandException e){
-            throw new CommandException(e);
-        }
 
-        try {
-            String resultAttr = ATTR_ERROR;
-            if (ITEM_SERVICE.addItem(item)) {
-               resultAttr = ATTR_SUCCESS;
+            try {
+                String resultAttr = ATTR_ERROR;
+                if (ITEM_SERVICE.addItem(item)) {
+                    resultAttr = ATTR_SUCCESS;
+                }
+                request.getSession().setAttribute(resultAttr, ActionResult.ITEM_ADDED_TO_CATALOG);
+            } catch (ServiceException e) {
+                throw new CommandException(e);
             }
-            request.getSession().setAttribute(resultAttr, ActionResult.ITEM_ADDED_TO_CATALOG);
-            page = COMMAND_VIEW_PAGE + ConfigurationManager.getProperty("path.page.admin.newitem");
-        } catch (ServiceException e) {
-            throw new CommandException(e);
+        } else {
+            request.getSession().setAttribute(ATTR_ERROR, ActionResult.VALIDATION_FAILED);
         }
+        page = COMMAND_VIEW_PAGE + ConfigurationManager.getProperty("path.page.admin.newitem");
         return page;
     }
 

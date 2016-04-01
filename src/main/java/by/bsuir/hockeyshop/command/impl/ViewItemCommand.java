@@ -46,9 +46,11 @@ public class ViewItemCommand implements ActionCommand {
                 addMessage(request);
                 page = ConfigurationManager.getProperty("path.page.item");
             } else {
-                    //TODO 404
+                MessageManager messageManager = (MessageManager)(request.getSession().getAttribute(ATTR_MESSAGE_MANAGER));
+                request.setAttribute(ATTR_ERROR, messageManager.getProperty("message.item.not.found"));
             }
         } catch (ServiceException e) {
+
             throw new CommandException(e);
         }
         return page;
@@ -63,6 +65,12 @@ public class ViewItemCommand implements ActionCommand {
                 case ITEM_ADDED_TO_ORDER:
                     message = messageManager.getProperty("message.order.add.item.success");
                     break;
+                case PRICE_UPDATED:
+                    message = messageManager.getProperty("message.price.update.success");
+                    break;
+                case STATUS_UPDATED:
+                    message = messageManager.getProperty("message.update.status.success");
+                    break;
                 default:
                     message = "";
             }
@@ -75,6 +83,12 @@ public class ViewItemCommand implements ActionCommand {
                 switch (error) {
                     case ITEM_ADDED_TO_ORDER:
                         message = messageManager.getProperty("message.order.add.item.success");
+                        break;
+                    case PRICE_UPDATED:
+                        message = messageManager.getProperty("message.price.update.error");
+                        break;
+                    case STATUS_UPDATED:
+                        message = messageManager.getProperty("message.update.status.error");
                         break;
                     default:
                         message = "";

@@ -20,6 +20,7 @@ public class SecurityFilter implements Filter {
 
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
+
         HttpServletRequest request = (HttpServletRequest)servletRequest;
         User user = (User)request.getSession().getAttribute(ATTR_USER);
         UserRole role;
@@ -38,7 +39,9 @@ public class SecurityFilter implements Filter {
                     return;
                 }
             } catch (IllegalArgumentException e) {
-                //TODO
+                RequestDispatcher dispatcher = request.getServletContext().getRequestDispatcher("/index.jsp");
+                dispatcher.forward(servletRequest, servletResponse);
+                return;
             }
         }
         filterChain.doFilter(servletRequest, servletResponse);
