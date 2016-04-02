@@ -1,5 +1,8 @@
 package by.bsuir.hockeyshop.entity;
 
+/**
+ * Abstract class {@code Entity} is the root for id-specified classes.
+ */
 public abstract class Entity {
     private long id;
 

@@ -4,12 +4,15 @@ import by.bsuir.hockeyshop.command.ActionCommand;
 import by.bsuir.hockeyshop.command.CommandException;
 import by.bsuir.hockeyshop.command.CommandStorage;
 import by.bsuir.hockeyshop.entity.User;
+import by.bsuir.hockeyshop.listener.SessionListener;
 import by.bsuir.hockeyshop.managers.MessageManager;
 import by.bsuir.hockeyshop.service.ServiceException;
 import by.bsuir.hockeyshop.service.UserService;
 import by.bsuir.hockeyshop.service.impl.UserServiceImpl;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+import java.util.Map;
 
 /**
  * Class {@code BanUserCommand} is an admin-only implementation of {@see ActionCommand}
@@ -43,6 +46,14 @@ public class BanUserCommand implements ActionCommand {
             if (userService.changeUserBanStatus(id, ban)) {
                 if (ban) {
                     request.setAttribute(ATTR_SUCCESS, messageManager.getProperty("message.ban.success"));
+                    Map<String, HttpSession> sessions = SessionListener.getSessionMap();
+                    for(HttpSession session: sessions.values()) {
+                        User user = (User)session.getAttribute("user");
+                        if (user != null && user.getId() == id) {
+                            session.invalidate();
+                            break;
+                        }
+                    }
                 } else {
                     request.setAttribute(ATTR_SUCCESS, messageManager.getProperty("message.unban.success"));
                 }

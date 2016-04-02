@@ -1,5 +1,9 @@
 package by.bsuir.hockeyshop.entity;
 
+/**
+ * Class {@code Item} represents an item in the shop's catalog. Each item has a name, color, size, price, status and type.
+ * Path to image, additional details and description can also be added.
+ */
 public class Item extends Entity{
     private String name;
     private String color;
@@ -7,7 +11,6 @@ public class Item extends Entity{
     private int price;
     private ItemStatus status;
     private ItemType type;
-    private int quantity;
     private String imagePath;
     private String additionalInfo;
     private String description;
@@ -50,14 +53,6 @@ public class Item extends Entity{
 
     public void setSize(String size) {
         this.size = size;
-    }
-
-    public int getQuantity() {
-        return quantity;
-    }
-
-    public void setQuantity(int quantity) {
-        this.quantity = quantity;
     }
 
     public ItemType getType() { return type; }

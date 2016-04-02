@@ -1,15 +1,43 @@
 package by.bsuir.hockeyshop.entity;
 
+/**
+ * Represents a user of the system. Each user has its unique login, along with a password, email and {@code UserRole}
+ * role. May contain a phone number. Also has a boolean field, specifying whether user is banned and therefore can't
+ * be authorized. May also contain count of orders of different types.
+ */
 public class User extends Entity {
     private String login;
     private String password;
     private String email;
     private UserRole role;
-    private String firstName;
-    private String secondName;
     private String phone;
     private String address;
     private Boolean banned;
+    private int countOfSubmittedOrders;
+    private int countOfPaidOrders;
+    private int countOfUnpaidOrders;
+    private int countOfLateOrders;
+
+    public User() {}
+
+    public User(long id) {
+        setId(id);
+    }
+    public User(String login, String password) {
+        this.login = login;
+        this.password = password;
+    }
+
+    public User(String login,  String password, String email) {
+        this(login, password);
+        this.email = email;
+    }
+
+    public User(String login, String password, String email, UserRole role) {
+        this(login, password, email);
+        this.role = role;
+    }
+
     public int getCountOfSubmittedOrders() {
         return countOfSubmittedOrders;
     }
@@ -42,31 +70,6 @@ public class User extends Entity {
         this.countOfLateOrders = countOfLateOrders;
     }
 
-    private int countOfSubmittedOrders;
-    private int countOfPaidOrders;
-    private int countOfUnpaidOrders;
-    private int countOfLateOrders;
-
-    public User() {}
-
-    public User(long id) {
-        setId(id);
-    }
-    public User(String login, String password) {
-        this.login = login;
-        this.password = password;
-    }
-
-    public User(String login,  String password, String email) {
-        this(login, password);
-        this.email = email;
-    }
-
-    public User(String login, String password, String email, UserRole role) {
-        this(login, password, email);
-        this.role = role;
-    }
-
     public String getLogin() {
         return login;
     }
@@ -97,22 +100,6 @@ public class User extends Entity {
 
     public void setRole(UserRole role) {
         this.role = role;
-    }
-
-    public String getFirstName() {
-        return firstName;
-    }
-
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
-    }
-
-    public String getSecondName() {
-        return secondName;
-    }
-
-    public void setSecondName(String secondName) {
-        this.secondName = secondName;
     }
 
     public String getPhone() {

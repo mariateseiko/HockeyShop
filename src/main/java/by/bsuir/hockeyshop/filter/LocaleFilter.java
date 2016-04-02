@@ -9,6 +9,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
+/**
+ * Filters all incoming requests and check whether {@code MessageManager} for retrieving server-side messages is present
+ * in the session. If not, adds it to the session as an attribute depending on the request's locale.
+ */
 @WebFilter(urlPatterns = {"/*"})
 public class LocaleFilter implements Filter {
     static final String ATTR_MESSAGE_MANAGER = "messageManager";

@@ -36,12 +36,16 @@ public class LoginCommand implements ActionCommand {
         String login = request.getParameter(PARAM_NAME_LOGIN);
         String pass = request.getParameter(PARAM_NAME_PASSWORD);
         User user;
-        MessageManager messageManager = (MessageManager)(request.getSession().getAttribute(ATTR_MESSAGE_MANAGER));
         try {
             if ((user = userService.loginUser(login, pass) )!= null) {
-                HttpSession session = request.getSession();
-                session.setAttribute(ATTR_USER, user);
-                page = ConfigurationManager.getProperty("path.page.index");
+                if (!user.isBanned()) {
+                    HttpSession session = request.getSession();
+                    session.setAttribute(ATTR_USER, user);
+                    page = ConfigurationManager.getProperty("path.page.index");
+                } else {
+                    //TODO replace
+                    page = ConfigurationManager.getProperty("path.page.index");
+                }
             } else {
                 request.getSession().setAttribute(ATTR_ERROR, ActionResult.LOGIN);
                 page = COMMAND_VIEW_PAGE + ConfigurationManager.getProperty("path.page.login");

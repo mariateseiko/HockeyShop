@@ -1,5 +1,8 @@
 package by.bsuir.hockeyshop.command;
 
+/**
+ * Defines a custom exception that may occur in any command
+ */
 public class CommandException extends Exception {
     public CommandException() {
         super();

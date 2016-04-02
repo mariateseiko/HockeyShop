@@ -9,6 +9,10 @@ import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 
+/**
+ * Filters all requests to the servlet by checking whether the user has corresponding rights to execute
+ * a specified command. If rights are insufficient, request is forwarded to the index page.
+ */
 @WebFilter(urlPatterns = {"/controller"})
 public class SecurityFilter implements Filter {
     static final String COMMAND = "command";

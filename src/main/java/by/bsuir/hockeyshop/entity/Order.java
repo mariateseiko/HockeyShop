@@ -2,6 +2,11 @@ package by.bsuir.hockeyshop.entity;
 
 import java.util.*;
 
+/**
+ * Class {@code Order} represents a user's order for a list of items. Contains creation date, in case it was already
+ * submitted and payment date if it has been paid. Order's owner is also specified. May contain count of items, sum
+ * for payment and a marker, specifying wether its payment is late.
+ */
 public class Order extends Entity {
     private GregorianCalendar creationDateTime;
     private GregorianCalendar paymentDateTime;
