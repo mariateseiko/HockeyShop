@@ -2,6 +2,7 @@ package by.bsuir.hockeyshop.command.impl;
 
 import by.bsuir.hockeyshop.command.ActionCommand;
 import by.bsuir.hockeyshop.command.CommandException;
+import by.bsuir.hockeyshop.command.MessageAdder;
 import by.bsuir.hockeyshop.entity.Item;
 import by.bsuir.hockeyshop.managers.ConfigurationManager;
 import by.bsuir.hockeyshop.managers.MessageManager;
@@ -20,7 +21,6 @@ public class ViewItemCommand implements ActionCommand {
     static final String PARAM_DIRECTION = "dir";
     static final String PARAM_LAST_PAGE = "lastPage";
     static final String ATTR_ITEM = "item";
-    static final String ATTR_SUCCESS = "successMessage";
     static final String ATTR_ERROR = "errorMessage";
     static final String ATTR_MESSAGE_MANAGER = "messageManager";
     private static final ItemService ITEM_SERVICE = ItemServiceImpl.getInstance();
@@ -43,7 +43,7 @@ public class ViewItemCommand implements ActionCommand {
                 String dir = request.getParameter(PARAM_DIRECTION);
                 request.setAttribute(PARAM_LAST_PAGE, lastPage);
                 request.setAttribute(PARAM_DIRECTION, dir);
-                addMessage(request);
+                MessageAdder.addMessage(request);
                 page = ConfigurationManager.getProperty("path.page.item");
             } else {
                 MessageManager messageManager = (MessageManager)(request.getSession().getAttribute(ATTR_MESSAGE_MANAGER));
@@ -54,48 +54,5 @@ public class ViewItemCommand implements ActionCommand {
             throw new CommandException(e);
         }
         return page;
-    }
-
-    private void addMessage(HttpServletRequest request) {
-        MessageManager messageManager = (MessageManager)(request.getSession().getAttribute(ATTR_MESSAGE_MANAGER));
-        ActionResult success = (ActionResult) request.getSession().getAttribute(ATTR_SUCCESS);
-        String message;
-        if (success!= null) {
-            switch (success) {
-                case ITEM_ADDED_TO_ORDER:
-                    message = messageManager.getProperty("message.order.add.item.success");
-                    break;
-                case PRICE_UPDATED:
-                    message = messageManager.getProperty("message.price.update.success");
-                    break;
-                case STATUS_UPDATED:
-                    message = messageManager.getProperty("message.update.status.success");
-                    break;
-                default:
-                    message = "";
-            }
-            request.getSession().removeAttribute(ATTR_SUCCESS);
-            request.setAttribute(ATTR_SUCCESS, message);
-
-        } else {
-            ActionResult error = (ActionResult) request.getSession().getAttribute(ATTR_ERROR);
-            if (error != null) {
-                switch (error) {
-                    case ITEM_ADDED_TO_ORDER:
-                        message = messageManager.getProperty("message.order.add.item.success");
-                        break;
-                    case PRICE_UPDATED:
-                        message = messageManager.getProperty("message.price.update.error");
-                        break;
-                    case STATUS_UPDATED:
-                        message = messageManager.getProperty("message.update.status.error");
-                        break;
-                    default:
-                        message = "";
-                }
-                request.setAttribute(ATTR_ERROR, message);
-                request.getSession().removeAttribute(ATTR_ERROR);
-            }
-        }
     }
 }

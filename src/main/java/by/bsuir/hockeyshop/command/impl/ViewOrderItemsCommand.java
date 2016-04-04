@@ -2,6 +2,7 @@ package by.bsuir.hockeyshop.command.impl;
 
 import by.bsuir.hockeyshop.command.ActionCommand;
 import by.bsuir.hockeyshop.command.CommandException;
+import by.bsuir.hockeyshop.command.MessageAdder;
 import by.bsuir.hockeyshop.entity.Order;
 import by.bsuir.hockeyshop.entity.User;
 import by.bsuir.hockeyshop.entity.UserRole;
@@ -20,8 +21,6 @@ import javax.servlet.http.HttpServletRequest;
 public class ViewOrderItemsCommand implements ActionCommand {
     private static final OrderService ORDER_SERVICE = OrderServiceImpl.getInstance();
     static final String PARAM_NO_ITEMS_MESSAGE = "noOrdersMessage";
-    static final String ATTR_ERROR = "errorMessage";
-    static final String ATTR_SUCCESS = "successMessage";
     static final String PARAM_ORDER_ID = "id";
     static final String ATTR_USER = "user";
     static final String ATTR_ITEMS = "items";
@@ -66,7 +65,7 @@ public class ViewOrderItemsCommand implements ActionCommand {
                     request.setAttribute(PARAM_NO_ITEMS_MESSAGE,
                             messageManager.getProperty("message.order.noitems"));
                 }
-                addMessage(request);
+                MessageAdder.addMessage(request);
             } else {
                 request.setAttribute(PARAM_NO_ITEMS_MESSAGE,
                         messageManager.getProperty("message.order.noitems"));
@@ -78,42 +77,5 @@ public class ViewOrderItemsCommand implements ActionCommand {
         return page;
     }
 
-    private void addMessage(HttpServletRequest request) {
-        MessageManager messageManager = (MessageManager)(request.getSession().getAttribute(ATTR_MESSAGE_MANAGER));
-        ActionResult success = (ActionResult) request.getSession().getAttribute(ATTR_SUCCESS);
-        String message = "";
-        if (success!= null) {
-            switch (success) {
-                case ORDER_PAID:
-                    message = messageManager.getProperty("message.order.pay.success");
-                    break;
-                case ORDER_SUBMITTED:
-                    message = messageManager.getProperty("message.order.submit.success");
-                    break;
-                case ITEM_REMOVED:
-                    message = messageManager.getProperty("message.order.remove.item.success");
-                    break;
-            }
-            request.getSession().removeAttribute(ATTR_SUCCESS);
-            request.setAttribute(ATTR_SUCCESS, message);
 
-        } else {
-            ActionResult error = (ActionResult) request.getSession().getAttribute(ATTR_ERROR);
-            if (error != null) {
-                switch (error) {
-                    case ORDER_PAID:
-                        message = messageManager.getProperty("message.order.pay.error");
-                        break;
-                    case ORDER_SUBMITTED:
-                        message = messageManager.getProperty("message.order.submit.error");
-                        break;
-                    case ITEM_REMOVED:
-                        message = messageManager.getProperty("message.order.remove.item.error");
-                        break;
-                }
-            }
-            request.setAttribute(ATTR_ERROR, message);
-            request.getSession().removeAttribute(ATTR_ERROR);
-        }
-    }
 }

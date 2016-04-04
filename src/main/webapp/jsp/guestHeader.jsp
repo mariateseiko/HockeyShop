@@ -6,31 +6,27 @@
       <button class="dropdown-button"  id="left-menu-button" ng-click="leftClick()"><fmt:message key="label.menu"/></button>
       <nav class="cd-dropdown dropdown-is-active" id="left-dropdown" ng-show="showLeft">
         <ul class="cd-dropdown-content">
+          <li class="cd-divider"><fmt:message key="label.catalog"/></li>
           <li>
-            <form class="cd-search">
-              <input type="search" placeholder=<fmt:message key="label.search"/>>
-            </form>
+            <a href="${pageContext.request.contextPath}/controller?command=catalog&type=goalie"><fmt:message key="label.menu.goalie"/></a>
           </li>
-          <li class="has-children">
-            <a href="http://codyhouse.co/?p=748">Clothing</a>
+          <li>
+            <a href="${pageContext.request.contextPath}/controller?command=catalog&type=player"><fmt:message key="label.menu.player"/></a>
           </li>
-          <li class="has-children">
-            <a href="http://codyhouse.co/?p=748">Gallery</a>
+          <li>
+            <a href="${pageContext.request.contextPath}/controller?command=catalog&type=accessory"><fmt:message key="label.menu.accessories"/></a>
           </li>
-          <li class="has-children">
-            <a href="http://codyhouse.co/?p=748">Services</a>
-          </li>
-          <li class="cd-divider">Divider</li>
-          <li><a href="http://codyhouse.co/?p=748">Page 1</a></li>
-          <li><a href="http://codyhouse.co/?p=748">Page 2</a></li>
-          <li><a href="http://codyhouse.co/?p=748">Page 3</a></li>
         </ul>
       </nav>
     </div>
     <div style="position: absolute; right: 0">
-      <button class="dropdown-button locale"  >EN</button>
-      <button class="dropdown-button active locale" >RU</button>
-      <button class="dropdown-button guest-button" ><a href="jsp/register.jsp"><fmt:message key="label.menu.signup"/></a></button>
+      <button class="dropdown-button ${sessionScope.locale.toString().equals('en_US') ? 'active' : ''} locale">
+        <a href="${pageContext.request.contextPath}/controller?command=change_locale&locale=en">EN</a>
+      </button>
+      <button class="dropdown-button ${sessionScope.locale.toString().equals('ru_RU') ? 'active' : ''} locale">
+        <a href="${pageContext.request.contextPath}/controller?command=change_locale&locale=ru">RU</a>
+      </button>
+      <button class="dropdown-button guest-button"><a href="jsp/register.jsp"><fmt:message key="label.menu.signup"/></a></button>
     </div>
     <div class="heading">
       <a href="${pageContext.request.contextPath}/index.jsp"><h2>Hockey<span>Corner</span></h2></a>

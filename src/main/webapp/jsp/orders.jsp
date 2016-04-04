@@ -11,49 +11,17 @@
   <link rel="stylesheet" href="${pageContext.request.contextPath}/css/menu.css">
   <script type="text/javascript" src="${pageContext.request.contextPath}/js/angular.js"></script>
   <script type="text/javascript" src="${pageContext.request.contextPath}/js/lasthope.js"></script>
-
 </head>
 <body ng-app="showApp">
 <ctg:userheader/>
 <div class="about" id="catalog" style="background-color: #212121">
   <div class="error_message">${successMessage}${errorMessage}${successRemove}</div>
-  <div style="border-bottom: 1px solid white; margin-bottom: 10px; "><span ><h4>
-    <c:choose>
-      <c:when test="${user.getRole().toString().equalsIgnoreCase('admin')}">
-        <c:set var="command" value="view_all_orders" scope="page"/>
-      </c:when>
-      <c:when test="${user.getRole().toString().equalsIgnoreCase('client')}">
-        <c:set var="command" value="view_user_orders" scope="page"/>
-      </c:when>
-    </c:choose>
-    <button class="${empty param.type.toString() && param.command.toString().equals(command) ? 'active' : ''}">
-      <a href="${pageContext.request.contextPath}/controller?command=${command}">
-        <fmt:message key="label.orders.all"/>
-      </a>
-    </button>
-    <button class="${param.type.toString().equals('paid') ? 'active' : ''}">
-      <a href="${pageContext.request.contextPath}/controller?command=${command}&type=paid">
-        <fmt:message key="label.orders.paid"/>
-      </a>
-    </button>
-    <button class="${param.type.toString().equals('unpaid') ? 'active' : ''}">
-      <a href="${pageContext.request.contextPath}/controller?command=${command}&type=unpaid">
-        <fmt:message key="label.orders.unpaid"/>
-      </a>
-    </button>
-    <c:if test="${user.getRole().toString().equalsIgnoreCase('client')}">
-      <button class="${param.command.toString().equals('view_order_items') ? 'active' : ''}">
-        <a href="${pageContext.request.contextPath}/controller?command=view_order_items">
-          <fmt:message key="label.order.current"/>
-        </a>
-      </button>
-    </c:if>
-  </h4></span></div>
+  <c:import url="/jsp/ordersMenu.jsp"/>
   <div class="item-container" style="background-color: white">
     <table class="orders">
       <tr class="headings">
         <td><fmt:message key="label.order.id"/></td>
-        <c:if test="${user.getRole().toString().equalsIgnoreCase('admin')}">
+        <c:if test="${user.getRole().toString().equalsIgnoreCase('admin') && command.equalsIgnoreCase('view_all_orders')}">
           <td><fmt:message key="label.user"/></td>
         </c:if>
         <td><fmt:message key="label.creation.date"/></td>
@@ -68,7 +36,7 @@
       <c:forEach var="order" items="${orders}">
         <tr>
           <td>${order.getId()}</td>
-          <c:if test="${user.getRole().toString().equalsIgnoreCase('admin')}">
+          <c:if test="${user.getRole().toString().equalsIgnoreCase('admin') && command.equalsIgnoreCase('view_all_orders')}">
             <td>${order.getUser().getLogin()}</td>
           </c:if>
           <td><ctg:orderdate calendar="${order.creationDateTime}"/></td>
@@ -93,6 +61,23 @@
         </tr>
       </c:forEach>
     </table>
+    <div class="pagination">
+      <c:if test="${numPages>1}">
+        <c:if test="${currentPage > 1}">
+          <button><a href="${pageContext.request.contextPath}/controller?command=catalog&type=${type}&page=${currentPage-1}&dir=${dir}"><fmt:message key="button.prev"/></a></button>
+        </c:if>
+        <c:if test="${currentPage > 2}">
+          <button><a href="${pageContext.request.contextPath}/controller?command=catalog&type=${type}&page=1&dir=${dir}"><fmt:message key="button.first"/></a></button>
+        </c:if>
+        <button class="active"><a href="${pageContext.request.contextPath}/controller?command=catalog&type=${type}&page=${currentPage}&dir=${dir}">${currentPage}</a></button>
+        <c:if test="${numPages>currentPage}">
+          <button><a href="${pageContext.request.contextPath}/controller?command=catalog&type=${type}&page=${numPages}&dir=${dir}"><fmt:message key="button.next"/></a></button>
+          <c:if test="${numPages>currentPage+1}">
+            <button><a href="${pageContext.request.contextPath}/controller?command=catalog&type=${type}&page=${currentPage+1}&dir=${dir}"><fmt:message key="button.last"/></a></button>
+          </c:if>
+        </c:if>
+      </c:if>
+    </div>
   </div>
 </div>
 </body>

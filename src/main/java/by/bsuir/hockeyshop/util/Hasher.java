@@ -5,8 +5,17 @@ import org.apache.log4j.Logger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
+/**
+ * An utility class for hashing purposes. Currently offers only md5 hash.
+ */
 public class Hasher {
     final static Logger LOG = Logger.getLogger(Hasher.class);
+
+    /**
+     * Calculates a hash value of a given string with md5 algorithm
+     * @param value String to hash
+     * @return md5 hash value of the string
+     */
     public static String md5Hash(String value) {
         String valueHash = null;
         if (value != null) {

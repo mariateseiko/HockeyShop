@@ -6,7 +6,11 @@ import by.bsuir.hockeyshop.entity.ItemType;
 
 import java.util.List;
 
+/**
+ * Represents an interface for item-related actions
+ */
 public interface ItemService {
+
     boolean addItem(Item item) throws ServiceException;
     boolean updateItemPrice(long id, int price) throws ServiceException;
     boolean updateItemStatus(long id, ItemStatus status) throws ServiceException;

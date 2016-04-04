@@ -43,8 +43,7 @@ public class LoginCommand implements ActionCommand {
                     session.setAttribute(ATTR_USER, user);
                     page = ConfigurationManager.getProperty("path.page.index");
                 } else {
-                    //TODO replace
-                    page = ConfigurationManager.getProperty("path.page.index");
+                    page = ConfigurationManager.getProperty("path.page.banned");
                 }
             } else {
                 request.getSession().setAttribute(ATTR_ERROR, ActionResult.LOGIN);

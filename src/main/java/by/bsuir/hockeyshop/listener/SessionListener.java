@@ -1,6 +1,5 @@
 package by.bsuir.hockeyshop.listener;
 
-import javax.servlet.ServletContext;
 import javax.servlet.annotation.WebListener;
 import javax.servlet.http.HttpSession;
 import javax.servlet.http.HttpSessionEvent;

@@ -188,9 +188,23 @@ public interface OrderDao {
      * is its corresponding value.
      * @param orderId id of the order
      * @return map, containing items from the order
-     * @throws DaoException
+     * @throws DaoException if failed to retrieve data from the storage due to technical problems
      */
-    Map<Item, Integer> getItemsByOrderId(long orderId) throws DaoException;
+    Map<Item, Integer> selectItemsByOrderId(long orderId) throws DaoException;
 
+    /**
+     * Retrieves id of a user, owning the order
+     * @param orderId id of the order to determine owner of
+     * @return id of the user, owning the order
+     * @throws DaoException if failed to retrieve data from the storage due to technical problems
+     */
     Long selectOrderOwnerId(long orderId) throws DaoException;
+
+    /**
+    * Deletes a specified late order
+    * @param orderId id of the order to delete
+    * @return {@code true} if deleted successfully, {@code false} if delete failed or if the order is not late
+    * @throws DaoException if failed to retrieve data from the storage due to technical problems
+    */
+    boolean deleteLateOrder(long orderId) throws DaoException;
 }

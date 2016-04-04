@@ -7,6 +7,11 @@
 </head>
 <body>
 <div id="error-page">
+    <header style="background-color: rgba(0,0,0,0.9)">
+        <div class="heading" >
+            <a style="text-decoration: initial" href="${pageContext.request.contextPath}/index.jsp"><h2>Hockey<span>Corner</span></h2></a>
+        </div>
+    </header>
     <div class="cover">
         <div class="error-container">
             <h1><span>${pageContext.errorData.statusCode}</span></h1>

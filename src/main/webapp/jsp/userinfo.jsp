@@ -16,9 +16,43 @@
 <ctg:userheader/>
 <div ng-controller="mainController" class="about" id="catalog">
   <span><h4 style="border-bottom: 1px solid white">
-    <a href="controller?command=view_users_list&type=unpaid">
-    <button><fmt:message key="label.all.users"/></button></a>
-    <button style="text-decoration: overline"><fmt:message key="label.user"/>:${user.getLogin()}</button>
+    <button class="sub-menu ${empty param.type.toString() && param.command.toString().equals(command) ? 'active' : ''}">
+      <a href="${pageContext.request.contextPath}/controller?command=${command}">
+        <fmt:message key="label.orders.all"/>
+      </a>
+    </button>
+    <button class="sub-menu ${param.type.toString().equals('paid') ? 'active' : ''}">
+      <a href="${pageContext.request.contextPath}/controller?command=${command}&type=paid">
+        <fmt:message key="label.orders.paid"/>
+      </a>
+    </button>
+    <button class="sub-menu ${param.type.toString().equals('unpaid') ? 'active' : ''}">
+      <a href="${pageContext.request.contextPath}/controller?command=${command}&type=unpaid">
+        <fmt:message key="label.orders.unpaid"/>
+      </a>
+    </button>
+    <button>
+      <a href="controller?command=view_users_list&type=unpaid">
+        <fmt:message key="label.all.users"/>
+      </a>
+    </button>
+</h4></span>
+  <span><h4>
+    <button class="sub-menu">
+      <a href="controller?command=view_user_orders&id=${user.id}&login=${user.login}">
+        ${user.getLogin()}:<fmt:message key="label.orders.all"/>
+      </a>
+    </button>
+    <button class="sub-menu">
+      <a href="controller?command=view_user_orders&type=paid&id=${user.id}&login=${user.login}">
+        ${user.getLogin()}:<fmt:message key="label.orders.paid"/>
+      </a>
+    </button>
+    <button class="sub-menu">
+      <a href="controller?command=view_user_orders&type=unpaid&id=${user.id}&login=${user.login}">
+        ${user.getLogin()}:<fmt:message key="label.orders.unpaid"/>
+      </a>
+    </button>
   </h4></span>
 
   <div class="error_message">${successMessage}${errorMessage}</div>

@@ -17,4 +17,5 @@ public interface OrderService {
     Order selectOrder(long orderId) throws ServiceException;
     Order selectCurrentOrder(long userId) throws ServiceException;
     Long selectOrderOwnerId(long orderId) throws ServiceException;
+    boolean deleteLateOrder(long orderId) throws ServiceException;
 }

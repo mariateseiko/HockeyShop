@@ -8,7 +8,6 @@
   <title><fmt:message key="label.title"/></title>
   <link rel="stylesheet" href="css/style.css">
   <link rel="stylesheet" href="css/menu.css">
-  <script type="text/javascript" src="js/jquery-1.11.0.min.js"></script>
   <script type="text/javascript" src="${pageContext.request.contextPath}/js/angular.js"></script>
   <script type="text/javascript" src="${pageContext.request.contextPath}/js/lasthope.js"></script>
 </head>

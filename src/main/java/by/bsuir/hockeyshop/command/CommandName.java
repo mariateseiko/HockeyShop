@@ -12,8 +12,6 @@ import java.util.List;
 public enum CommandName {
     LOGIN(UserRole.GUEST),
     REGISTER(UserRole.GUEST),
-    LOGOUT(UserRole.CLIENT, UserRole.ADMIN),
-    VIEW_USER_ORDERS(UserRole.CLIENT),
     PAY_ORDER(UserRole.CLIENT),
     SUBMIT_ORDER(UserRole.CLIENT),
     ADD_TO_ORDER(UserRole.CLIENT),
@@ -27,11 +25,12 @@ public enum CommandName {
     VIEW_USER(UserRole.ADMIN),
     VIEW_USERS_LIST(UserRole.ADMIN),
     VIEW_ORDER_ITEMS(UserRole.CLIENT, UserRole.ADMIN),
+    LOGOUT(UserRole.CLIENT, UserRole.ADMIN),
+    VIEW_USER_ORDERS(UserRole.CLIENT, UserRole.ADMIN),
     CATALOG(UserRole.GUEST, UserRole.CLIENT, UserRole.ADMIN),
     CHANGE_LOCALE(UserRole.GUEST, UserRole.CLIENT, UserRole.ADMIN),
     VIEW_ITEM(UserRole.GUEST, UserRole.CLIENT, UserRole.ADMIN),
     VIEW_PAGE(UserRole.GUEST, UserRole.CLIENT, UserRole.ADMIN);
-
 
     private List<UserRole> allowedUsers = new ArrayList<>();
     CommandName(UserRole... allowedUsers) {

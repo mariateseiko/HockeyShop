@@ -153,7 +153,7 @@ public class OrderServiceImpl implements OrderService {
         try {
             order = orderDao.selectOrder(orderId);
             if (order != null) {
-                items = orderDao.getItemsByOrderId(orderId);
+                items = orderDao.selectItemsByOrderId(orderId);
                 if (items != null) {
                     order.setItems(items);
                 }
@@ -171,7 +171,7 @@ public class OrderServiceImpl implements OrderService {
         try {
             order = orderDao.selectCurrentOrder(userId);
             if (order != null) {
-                items = orderDao.getItemsByOrderId(order.getId());
+                items = orderDao.selectItemsByOrderId(order.getId());
                 if (items != null) {
                     order.setItems(items);
                 }
@@ -186,6 +186,15 @@ public class OrderServiceImpl implements OrderService {
     public Long selectOrderOwnerId(long orderId) throws ServiceException {
         try {
             return orderDao.selectOrderOwnerId(orderId);
+        } catch (DaoException e) {
+            throw new ServiceException(e);
+        }
+    }
+
+    @Override
+    public boolean deleteLateOrder(long orderId) throws ServiceException {
+        try {
+            return orderDao.deleteLateOrder(orderId);
         } catch (DaoException e) {
             throw new ServiceException(e);
         }

@@ -81,6 +81,8 @@ public class OrderDaoImpl implements OrderDao {
     static final String REMOVE_ITEM_FROM_ORDER = "DELETE FROM order_item WHERE order_id=? AND item_id=?";
     static final String UPDATE_ORDER_PAYMENT = "UPDATE `order` SET payment_date=now() WHERE order_id=?";
     static final String DELETE_ORDER = "DELETE FROM `order` WHERE order_id=? AND payment_date IS NULL";
+    static final String DELETE_LATE_ORDER = "DELETE FROM `order` WHERE order_id=? " +
+            "AND creation_date < DATE_SUB(now(), INTERVAL 3 DAY) AND payment_date IS NULL";
     static final String UPDATE_ORDER_STATUS = "UPDATE `order` SET creation_date=now() WHERE order_id=?";
     static final String SELECT_CURRENT_ORDER= "SELECT `order`.order_id,  creation_date, payment_date, " +
             "SUM(item.price*order_item.quantity) AS totalSum, SUM(quantity) AS totalCount " +
@@ -233,6 +235,19 @@ public class OrderDaoImpl implements OrderDao {
             throw new DaoException("Request to database failed", e);
         }
         return order;
+    }
+
+    public boolean deleteLateOrder(long orderId) throws DaoException {
+        try(Connection cn = ConnectionPool.getInstance().takeConnection();
+            PreparedStatement st = cn.prepareStatement(DELETE_LATE_ORDER)) {
+            st.setLong(1, orderId);
+            if (st.executeUpdate() == 0) {
+                return false;
+            }
+        } catch (SQLException e) {
+            throw new DaoException("Request to database failed", e);
+        }
+        return true;
     }
 
     @Override
@@ -457,7 +472,7 @@ public class OrderDaoImpl implements OrderDao {
     }
 
     @Override
-    public Map<Item, Integer> getItemsByOrderId(long id) throws DaoException {
+    public Map<Item, Integer> selectItemsByOrderId(long id) throws DaoException {
         Map<Item, Integer> items = new HashMap<>();
         try(Connection cn = ConnectionPool.getInstance().takeConnection();
             PreparedStatement st = cn.prepareStatement(GET_ITEMS_BY_ORDER_ID)) {

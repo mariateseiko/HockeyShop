@@ -49,9 +49,12 @@
           </nav>
       </div>
       <div style="position: absolute; right: 0">
-
-        <button class="dropdown-button ${pageContext.request.locale.toString().equals('en_US') ? 'active' : ''} locale"><a href="${pageContext.request.contextPath}/controller?command=change_locale&locale=en">EN</a></button>
-        <button class="dropdown-button ${pageContext.request.locale.toString().equals('ru_RU') ? 'active' : ''} locale"><a href="${pageContext.request.contextPath}/controller?command=change_locale&locale=ru">RU</a></button>
+        <button class="dropdown-button ${sessionScope.locale.toString().equals('en_US') ? 'active' : ''} locale">
+          <a href="${pageContext.request.contextPath}/controller?command=change_locale&locale=en">EN</a>
+        </button>
+        <button class="dropdown-button ${sessionScope.locale.toString().equals('ru_RU') ? 'active' : ''} locale">
+          <a href="${pageContext.request.contextPath}/controller?command=change_locale&locale=ru">RU</a>
+        </button>
       </div>
     <div class="heading">
       <a href="${pageContext.request.contextPath}/index.jsp"><h2>Hockey<span>Corner</span></h2></a>

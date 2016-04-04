@@ -2,6 +2,7 @@ package by.bsuir.hockeyshop.command.impl;
 
 import by.bsuir.hockeyshop.command.ActionCommand;
 import by.bsuir.hockeyshop.command.CommandException;
+import by.bsuir.hockeyshop.command.MessageAdder;
 import by.bsuir.hockeyshop.entity.Order;
 import by.bsuir.hockeyshop.entity.OrderType;
 import by.bsuir.hockeyshop.managers.ConfigurationManager;
@@ -20,7 +21,8 @@ public class ViewSubmittedOrdersCommand implements ActionCommand {
     private static final OrderService ORDER_SERVICE = OrderServiceImpl.getInstance();
     static final String PARAM_TYPE = "type";
     static final String PARAM_NO_ORDERS_MESSAGE = "noOrdersMessage";
-    static final String PARAM_ERROR_MESSAGE = "errorMessage";
+    static final String ATTR_ERROR = "errorMessage";
+    static final String ATTR_SUCCESS = "successMessage";
     static final String PARAM_PAGE = "page";
     static final int DEFAULT_START_PAGE = 1;
     static final int MAX_ORDERS_PER_PAGE = 10;
@@ -64,11 +66,12 @@ public class ViewSubmittedOrdersCommand implements ActionCommand {
                     orders = ORDER_SERVICE.selectAllOrders((pageNumber - 1) * MAX_ORDERS_PER_PAGE, MAX_ORDERS_PER_PAGE);
                     break;
             }
-            if (orders == null) {
+            if (orders != null) {
+                request.setAttribute(ATTR_ORDERS, orders);
+                MessageAdder.addMessage(request);
+            } else {
                 request.setAttribute(PARAM_NO_ORDERS_MESSAGE,
                         messageManager.getProperty("message.user.order.noorders"));
-            } else {
-                request.setAttribute(ATTR_ORDERS, orders);
             }
             page = ConfigurationManager.getProperty("path.page.orders");
         } catch (ServiceException e) {
