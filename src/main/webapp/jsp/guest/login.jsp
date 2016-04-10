@@ -10,6 +10,11 @@
 </head>
 <body >
 <div id="login_back">
+  <header style="background-color: rgba(0,0,0,0.8)">
+    <div class="heading" >
+      <a style="text-decoration: initial" href="${pageContext.request.contextPath}/index.jsp"><h2>Hockey<span>Corner</span></h2></a>
+    </div>
+  </header>
     <div class="cover">
 <div class="popupContainer" id="login_container">
   <header class="popupHeader">

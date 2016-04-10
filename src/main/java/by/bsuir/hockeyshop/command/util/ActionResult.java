@@ -1,4 +1,4 @@
-package by.bsuir.hockeyshop.command.impl;
+package by.bsuir.hockeyshop.command.util;
 
 /**
  * Represents possible outcomes of several post commands. Used as a part of the Post-Redirect-Get pattern to pass results
@@ -18,6 +18,8 @@ public enum ActionResult {
     PRICE_UPDATED("message.price.update.success", "message.price.update.error"),
     LATE_ORDER_DELETED("message.order.delete.success", "message.order.late.delete.error"),
     ORDER_SUBMITTED("message.order.submit.success", "message.order.submit.error"),
+    USER_BANNED("message.ban.success", "message.ban.error"),
+    USER_UNBANNED("message.unban.success", "message.unban.error"),
     VALIDATION_FAILED("message.item.add.validation.error");
 
     private String successKey;

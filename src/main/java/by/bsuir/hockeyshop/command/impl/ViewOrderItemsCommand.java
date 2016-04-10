@@ -2,7 +2,7 @@ package by.bsuir.hockeyshop.command.impl;
 
 import by.bsuir.hockeyshop.command.ActionCommand;
 import by.bsuir.hockeyshop.command.CommandException;
-import by.bsuir.hockeyshop.command.MessageAdder;
+import by.bsuir.hockeyshop.command.util.MessageAdder;
 import by.bsuir.hockeyshop.entity.Order;
 import by.bsuir.hockeyshop.entity.User;
 import by.bsuir.hockeyshop.entity.UserRole;
@@ -19,16 +19,19 @@ import javax.servlet.http.HttpServletRequest;
  * for viewing items belonging to a specified order
  */
 public class ViewOrderItemsCommand implements ActionCommand {
-    private static final OrderService ORDER_SERVICE = OrderServiceImpl.getInstance();
-    static final String PARAM_NO_ITEMS_MESSAGE = "noOrdersMessage";
-    static final String PARAM_ORDER_ID = "id";
-    static final String ATTR_USER = "user";
-    static final String ATTR_ITEMS = "items";
-    static final String ATTR_QUANTITY = "quantity";
-    static final String ATTR_TOTAL_SUM = "sum";
-    static final String ATTR_CREATION_DATE = "creationDate";
-    static final String ATTR_PAYMENT_DATE = "paymentDate";
-    static final String ATTR_MESSAGE_MANAGER = "messageManager";
+    private static OrderService orderService = OrderServiceImpl.getInstance();
+
+    private static final String PARAM_NO_ITEMS_MESSAGE = "noOrdersMessage";
+    private static final String PARAM_ORDER_ID = "id";
+    private static final String ATTR_USER = "user";
+    private static final String ATTR_ITEMS = "items";
+    private static final String ATTR_QUANTITY = "quantity";
+    private static final String ATTR_TOTAL_SUM = "sum";
+    private static final String ATTR_CREATION_DATE = "creationDate";
+    private static final String ATTR_PAYMENT_DATE = "paymentDate";
+    private static final String ATTR_MESSAGE_MANAGER = "messageManager";
+    private static final String ATTR_LATE = "late";
+
     /**
      * Handles request to the servlet by retrieving and returning a list of order's items. If order's id is not specified,
      * current order's items are retrieved.
@@ -46,12 +49,12 @@ public class ViewOrderItemsCommand implements ActionCommand {
             String orderIdParam = request.getParameter(PARAM_ORDER_ID);
             if (orderIdParam != null) {
                 Long orderId = Long.parseLong(orderIdParam);
-                if (user.getRole() != UserRole.ADMIN && user.getId() != ORDER_SERVICE.selectOrderOwnerId(orderId)) {
+                if (user.getRole() != UserRole.ADMIN && user.getId() != orderService.selectOrderOwnerId(orderId)) {
                     return ConfigurationManager.getProperty("path.page.index");
                 }
-                order = ORDER_SERVICE.selectOrder(orderId);
+                order = orderService.selectOrder(orderId);
             } else {
-                order = ORDER_SERVICE.selectCurrentOrder(user.getId());
+                order = orderService.selectCurrentOrder(user.getId());
             }
             if (order != null) {
                 request.setAttribute(PARAM_ORDER_ID, order.getId());
@@ -59,6 +62,7 @@ public class ViewOrderItemsCommand implements ActionCommand {
                 request.setAttribute(ATTR_TOTAL_SUM, order.getPaymentSum());
                 request.setAttribute(ATTR_CREATION_DATE, order.getCreationDateTime());
                 request.setAttribute(ATTR_PAYMENT_DATE, order.getPaymentDateTime());
+                request.setAttribute(ATTR_LATE, order.isLate());
                 if (order.getItems() != null) {
                     request.setAttribute(ATTR_ITEMS, order.getItems());
                 } else {
@@ -76,6 +80,4 @@ public class ViewOrderItemsCommand implements ActionCommand {
         }
         return page;
     }
-
-
 }

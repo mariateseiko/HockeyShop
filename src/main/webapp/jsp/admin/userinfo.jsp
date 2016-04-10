@@ -32,25 +32,25 @@
       </a>
     </button>
     <button>
-      <a href="controller?command=view_users_list&type=unpaid">
+      <a href="${pageContext.request.contextPath}/controller?command=view_users_list">
         <fmt:message key="label.all.users"/>
       </a>
     </button>
 </h4></span>
   <span><h4>
     <button class="sub-menu">
-      <a href="controller?command=view_user_orders&id=${user.id}&login=${user.login}">
-        ${user.getLogin()}:<fmt:message key="label.orders.all"/>
+      <a href="controller?command=view_user_orders&id=${appUser.id}&login=${appUser.login}">
+        ${appUser.getLogin()}:<fmt:message key="label.orders.all"/>
       </a>
     </button>
     <button class="sub-menu">
-      <a href="controller?command=view_user_orders&type=paid&id=${user.id}&login=${user.login}">
-        ${user.getLogin()}:<fmt:message key="label.orders.paid"/>
+      <a href="controller?command=view_user_orders&type=paid&id=${appUser.id}&login=${appUser.login}">
+        ${appUser.getLogin()}:<fmt:message key="label.orders.paid"/>
       </a>
     </button>
     <button class="sub-menu">
-      <a href="controller?command=view_user_orders&type=unpaid&id=${user.id}&login=${user.login}">
-        ${user.getLogin()}:<fmt:message key="label.orders.unpaid"/>
+      <a href="controller?command=view_user_orders&type=unpaid&id=${appUser.id}&login=${appUser.login}">
+        ${appUser.getLogin()}:<fmt:message key="label.orders.unpaid"/>
       </a>
     </button>
   </h4></span>
@@ -59,50 +59,46 @@
   <div class="item-container">
     <div class="item-wrapper-big">
       <div class="user">
-        <div class="item-name">${user.getLogin()} </div>
+        <div class="item-name">${appUser.login} </div>
         <div class="user-info">
           <div class="info">
             <span class="info-label"><fmt:message key="label.email"/></span>
-            <span class="info-value">${user.getEmail()}</span></div>
-          <br/>
-          <div class="info">
-            <span class="info-label"><fmt:message key="label.contact.phone"/></span>
-            <span class="info-value">${user.getPhone()}</span></div>
+            <span class="info-value">${appUser.email}</span></div>
           <br/>
           <div class="info">
             <span class="info-label"><fmt:message key="label.submitted"/></span>
-            <span class="info-value">${user.getCountOfSubmittedOrders()}</span>
+            <span class="info-value">${appUser.countOfSubmittedOrders}</span>
           </div>
           <br/>
           <div class="info">
             <span class="info-label"><fmt:message key="label.paid"/></span>
-            <span class="info-value">${user.getCountOfPaidOrders()}</span>
+            <span class="info-value">${appUser.countOfPaidOrders}</span>
           </div>
           <br/>
           <div class="info">
             <span class="info-label"><fmt:message key="label.unpaid"/></span>
-            <span class="info-value">${user.getCountOfUnpaidOrders()}</span>
+            <span class="info-value">${appUser.countOfUnpaidOrders}</span>
           </div>
           <br/>
           <div class="info">
             <span class="info-label"><fmt:message key="label.late"/></span>
-            <span class="info-value">${user.getCountOfLateOrders()}</span>
+            <span class="info-value">${appUser.countOfLateOrders}</span>
           </div>
           <br/>
         </div>
-        <c:if test="${user.getCountOfLateOrders()>0 && !user.isBanned()}">
+        <c:if test="${appUser.countOfLateOrders >0 && !appUser.isBanned()}">
           <div class="number">
             <button class="bottom" ng-click="showUpdateStatus=!showUpdateStatus; showUpdatePrice=false">
-              <a href="${pageContext.request.contextPath}/controller?command=ban_user&id=${user.getId()}&ban=true">
+              <a href="${pageContext.request.contextPath}/controller?command=ban_user&id=${appUser.id}&ban=true">
                 <fmt:message key="label.ban.user"/>
               </a>
             </button>
           </div>
         </c:if>
-        <c:if test="${user.isBanned()}">
+        <c:if test="${appUser.isBanned()}">
           <div class="number">
             <button class="bottom" ng-click="showUpdateStatus=!showUpdateStatus; showUpdatePrice=false">
-              <a href="${pageContext.request.contextPath}/controller?command=ban_user&id=${user.getId()}&ban=false">
+              <a href="${pageContext.request.contextPath}/controller?command=ban_user&id=${appUser.id}&ban=false">
                 <fmt:message key="button.unban"/>
               </a>
             </button>

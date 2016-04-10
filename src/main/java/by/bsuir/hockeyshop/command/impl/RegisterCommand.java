@@ -2,12 +2,13 @@ package by.bsuir.hockeyshop.command.impl;
 
 import by.bsuir.hockeyshop.command.ActionCommand;
 import by.bsuir.hockeyshop.command.CommandException;
+import by.bsuir.hockeyshop.command.util.ActionResult;
 import by.bsuir.hockeyshop.entity.User;
 import by.bsuir.hockeyshop.service.ServiceException;
 import by.bsuir.hockeyshop.managers.ConfigurationManager;
 import by.bsuir.hockeyshop.service.UserService;
 import by.bsuir.hockeyshop.service.impl.UserServiceImpl;
-import by.bsuir.hockeyshop.util.Validator;
+import by.bsuir.hockeyshop.command.util.Validator;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -16,14 +17,14 @@ import javax.servlet.http.HttpServletRequest;
  * for registration of a new user
  */
 public class RegisterCommand implements ActionCommand {
-    static final String PARAM_NAME_LOGIN = "login";
-    static final String PARAM_NAME_PASSWORD = "password";
-    static final String PARAM_EMAIL = "email";
-    static final String ATTR_ERROR = "errorMessage";
-    static final String ATTR_SUCCESS = "successMessage";
-    static final String ATTR_USER = "user";
-    static final String COMMAND_VIEW_PAGE = "/controller?command=view_page&page=";
-    private static final UserService userService = UserServiceImpl.getInstance();
+    private static final String PARAM_NAME_LOGIN = "login";
+    private static final String PARAM_NAME_PASSWORD = "password";
+    private static final String PARAM_EMAIL = "email";
+    private static final String ATTR_ERROR = "errorMessage";
+    private static final String ATTR_SUCCESS = "successMessage";
+    private static final String COMMAND_VIEW_PAGE = "/controller?command=view_page&page=";
+
+    private static UserService userService = UserServiceImpl.getInstance();
 
     /**
      * Handles request to the servlet by trying to register a new user
@@ -53,7 +54,7 @@ public class RegisterCommand implements ActionCommand {
             }
         } else {
             request.getSession().setAttribute(ATTR_ERROR, ActionResult.REGISTER_VALIDATED);
-            page = ConfigurationManager.getProperty("path.page.register");
+            page = COMMAND_VIEW_PAGE + ConfigurationManager.getProperty("path.page.register");
         }
         return page;
     }

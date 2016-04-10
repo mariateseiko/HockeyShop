@@ -45,11 +45,9 @@ public interface UserDao {
     boolean updateUserBannedStatus(long userId, boolean banStatus) throws DaoException;
 
     /**
-     * Retrieves a list of clients with given offset and limit.
-     * @param limit max number of user's in list
-     * @param offset offset from the start of the list
+     * Retrieves a list of clients
      * @return list of users
      * @throws DaoException if failed to retrieve data from the storage due to technical problems
      */
-    List<User> selectUsers(int limit, int offset) throws DaoException;
+    List<User> selectUsers() throws DaoException;
 }

@@ -12,61 +12,49 @@ import java.util.Map;
  */
 public interface OrderDao {
     /**
-     * Retrieves a list of all user's orders, from a specified offset with a given limit
+     * Retrieves a list of all user's orders
      * @param userId id of the user
-     * @param offset offset from the start of the list of all user's orders
-     * @param limit max number of orders in list
      * @return list of user's orders or {@code null} if user has none
      * @throws DaoException  if failed to retrieve data from the storage due to technical problems
      */
-    List<Order> selectOrdersByUserId(long userId, int offset, int limit) throws DaoException;
+    List<Order> selectOrdersByUserId(long userId) throws DaoException;
 
     /**
-     * Retrieves a list of all paid user's orders, from a specified offset with a given limit
+     * Retrieves a list of all paid user's orders
      * @param userId id of the user
-     * @param offset offset from the start of the list of all paid user's orders
-     * @param limit max number of orders in list
      * @return list of paid user's orders or {@code null} if user has none
      * @throws DaoException  if failed to retrieve data from the storage due to technical problems
      */
-    List<Order> selectPaidOrdersByUserId(long userId, int offset, int limit) throws DaoException;
+    List<Order> selectPaidOrdersByUserId(long userId) throws DaoException;
 
     /**
-     * Retrieves a list of all unpaid user's orders, from a specified offset with a given limit
+     * Retrieves a list of all unpaid user's orders
      * @param userId id of the user
-     * @param offset offset from the start of the list of all unpaid user's orders
-     * @param limit max number of orders in list
      * @return list of unpaid user's orders or {@code null} if user has none
      * @throws DaoException  if failed to retrieve data from the storage due to technical problems
      */
-    List<Order> selectUnpaidOrdersByUserId(long userId, int offset, int limit) throws DaoException;
+    List<Order> selectUnpaidOrdersByUserId(long userId) throws DaoException;
 
     /**
-     * Retrieves a list orders made by all clients from a specified offset with a given limit
-     * @param offset offset from the start of the list of all users' orders
-     * @param limit max number of orders in list
+     * Retrieves a list orders made by all clients
      * @return list of all orders or {@code null} if there are none
      * @throws DaoException  if failed to retrieve data from the storage due to technical problems
      */
-    List<Order> selectAllOrders(int offset, int limit) throws DaoException;
+    List<Order> selectAllOrders() throws DaoException;
 
     /**
-     * Retrieves a list of unpaid orders made by all clients from a specified offset with a given limit
-     * @param offset offset from the start of the list of all unpaid users' orders
-     * @param limit max number of orders in list
+     * Retrieves a list of unpaid orders made by all clients
      * @return list of all unpaid orders or {@code null} if there are none
      * @throws DaoException  if failed to retrieve data from the storage due to technical problems
      */
-    List<Order> selectAllUnpaidOrders(int offset, int limit) throws DaoException;
+    List<Order> selectAllUnpaidOrders() throws DaoException;
 
     /**
-     * Retrieves a list of paid orders made by all clients from a specified offset with a given limit
-     * @param offset offset from the start of the list of all paid users' orders
-     * @param limit max number of orders in list
+     * Retrieves a list of paid orders made by all clients
      * @return list of all paid orders or {@code null} if there are none
      * @throws DaoException  if failed to retrieve data from the storage due to technical problems
      */
-    List<Order> selectAllPaidOrders(int offset, int limit) throws DaoException;
+    List<Order> selectAllPaidOrders() throws DaoException;
 
     /**
      * Retrieves current(unsubmitted) order for a specified user
@@ -87,18 +75,18 @@ public interface OrderDao {
     /**
      * Retrieves id of the user's current order
      * @param userId id of the user, owning the order
-     * @return order's id or {@code null} if there is no current order
+     * @return order's id or -1 if there is no current order
      * @throws DaoException if failed to retrieve data from the storage due to technical problems
      */
-    Long selectCurrentOrderId(long userId) throws DaoException;
+    long selectCurrentOrderId(long userId) throws DaoException;
 
     /**
      * Places new current order for a specified user
      * @param userId id of the user, owning the order
-     * @return order's id or {@code null} if insert failed
+     * @return order's id or -1 if insert failed
      * @throws DaoException if failed to retrieve data from the storage due to technical problems
      */
-    Long insertNewOrder(long userId) throws DaoException;
+    long insertNewOrder(long userId) throws DaoException;
 
     /**
      * Adds an item with a specified id of a specified count to a given order
@@ -108,7 +96,7 @@ public interface OrderDao {
      * @return {@code true} if inserted successfully, {@code false} if insert failed
      * @throws DaoException if failed to retrieve data from the storage due to technical problems
      */
-    boolean addItemsToOrder(long itemId, int count, long orderId) throws DaoException;
+    boolean insertItemsToOrder(long itemId, int count, long orderId) throws DaoException;
 
     /**
      * Removes all items with a specified id from given order
@@ -117,7 +105,7 @@ public interface OrderDao {
      * @return {@code true} if removed successfully, {@code false} if delete failed
      * @throws DaoException if failed to retrieve data from the storage due to technical problems
      */
-    boolean removeItemsFromOrder(long itemId, long orderId) throws DaoException;
+    boolean deleteItemsFromOrder(long itemId, long orderId) throws DaoException;
 
     /**
      * Marks an order as paid and sets date and time of payment
@@ -198,7 +186,7 @@ public interface OrderDao {
      * @return id of the user, owning the order
      * @throws DaoException if failed to retrieve data from the storage due to technical problems
      */
-    Long selectOrderOwnerId(long orderId) throws DaoException;
+    long selectOrderOwnerId(long orderId) throws DaoException;
 
     /**
     * Deletes a specified late order

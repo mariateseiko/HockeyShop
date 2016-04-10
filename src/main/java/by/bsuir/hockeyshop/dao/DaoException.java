@@ -1,7 +1,7 @@
 package by.bsuir.hockeyshop.dao;
 
 /**
- * This exception is thrown on DAO layer in case of technical problems with the database
+ * This exception is thrown on DAO layer in case of technical problems with the database or connection pool
  */
 public class DaoException extends Exception {
     public DaoException() {

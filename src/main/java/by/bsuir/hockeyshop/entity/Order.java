@@ -75,4 +75,29 @@ public class Order extends Entity {
     public void setLate(boolean isLate) {
         this.isLate = isLate;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Order order = (Order) o;
+
+        if (creationDateTime != null ? !creationDateTime.equals(order.creationDateTime) : order.creationDateTime != null)
+            return false;
+        if (paymentDateTime != null ? !paymentDateTime.equals(order.paymentDateTime) : order.paymentDateTime != null)
+            return false;
+        if (items != null ? !items.equals(order.items) : order.items != null) return false;
+        return !(user != null ? !user.equals(order.user) : order.user != null);
+
+    }
+
+    @Override
+    public int hashCode() {
+        int result = creationDateTime != null ? creationDateTime.hashCode() : 0;
+        result = 31 * result + (paymentDateTime != null ? paymentDateTime.hashCode() : 0);
+        result = 31 * result + (items != null ? items.hashCode() : 0);
+        result = 31 * result + (user != null ? user.hashCode() : 0);
+        return result;
+    }
 }

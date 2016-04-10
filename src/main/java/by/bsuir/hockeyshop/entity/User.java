@@ -1,5 +1,7 @@
 package by.bsuir.hockeyshop.entity;
 
+import java.util.Objects;
+
 /**
  * Represents a user of the system. Each user has its unique login, along with a password, email and {@code UserRole}
  * role. May contain a phone number. Also has a boolean field, specifying whether user is banned and therefore can't
@@ -10,8 +12,6 @@ public class User extends Entity {
     private String password;
     private String email;
     private UserRole role;
-    private String phone;
-    private String address;
     private Boolean banned;
     private int countOfSubmittedOrders;
     private int countOfPaidOrders;
@@ -23,6 +23,12 @@ public class User extends Entity {
     public User(long id) {
         setId(id);
     }
+
+    public User(long id, String login) {
+        this.login = login;
+        setId(id);
+    }
+
     public User(String login, String password) {
         this.login = login;
         this.password = password;
@@ -102,22 +108,6 @@ public class User extends Entity {
         this.role = role;
     }
 
-    public String getPhone() {
-        return phone;
-    }
-
-    public void setPhone(String phone) {
-        this.phone = phone;
-    }
-
-    public String getAddress() {
-        return address;
-    }
-
-    public void setAddress(String address) {
-        this.address = address;
-    }
-
     public Boolean isBanned() {
         return banned;
     }
@@ -127,14 +117,27 @@ public class User extends Entity {
     }
 
     @Override
-    public String toString() {
-        return "User{" +
-                "login='" + login + '\'' +
-                ", password='" + password + '\'' +
-                ", email='" + email + '\'' +
-                ", role=" + role +
-                ", phone='" + phone + '\'' +
-                ", banned=" + banned +
-                '}';
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        User user = (User) o;
+
+        if (!login.equals(user.login)) return false;
+        if (password != null ? !password.equals(user.password) : user.password != null) return false;
+        if (email != null ? !email.equals(user.email) : user.email != null) return false;
+        if (role != user.role) return false;
+        return !(banned != null ? !banned.equals(user.banned) : user.banned != null);
+
+    }
+
+    @Override
+    public int hashCode() {
+        int result = login.hashCode();
+        result = 31 * result + (password != null ? password.hashCode() : 0);
+        result = 31 * result + (email != null ? email.hashCode() : 0);
+        result = 31 * result + (role != null ? role.hashCode() : 0);
+        result = 31 * result + (banned != null ? banned.hashCode() : 0);
+        return result;
     }
 }

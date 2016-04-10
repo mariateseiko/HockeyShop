@@ -2,6 +2,7 @@ package by.bsuir.hockeyshop.command.impl;
 
 import by.bsuir.hockeyshop.command.ActionCommand;
 import by.bsuir.hockeyshop.command.CommandException;
+import by.bsuir.hockeyshop.command.util.ActionResult;
 import by.bsuir.hockeyshop.service.OrderService;
 import by.bsuir.hockeyshop.service.ServiceException;
 import by.bsuir.hockeyshop.service.impl.OrderServiceImpl;
@@ -13,12 +14,11 @@ import javax.servlet.http.HttpServletRequest;
  * for submitting the current order
  */
 public class SubmitOrderCommand implements ActionCommand {
-    static final String PARAM_ORDER_ID = "id";
-    static final String ATTR_SUCCESS = "successSubmit";
-    static final String ATTR_ERROR = "errorMessage";
-    static final String ATTR_USER = "user";
-    static final String ATTR_MESSAGE_MANAGER = "messageManager";
-    static final String COMMAND_VIEW_ORDER_ITEMS = "/controller?command=view_order_items&id=";
+    private static final String PARAM_ORDER_ID = "id";
+    private static final String ATTR_SUCCESS = "successMessage";
+    private static final String ATTR_ERROR = "errorMessage";
+    private static final String COMMAND_VIEW_ORDER_ITEMS = "/controller?command=view_order_items&id=";
+
     private static final OrderService orderService = OrderServiceImpl.getInstance();
 
     /**

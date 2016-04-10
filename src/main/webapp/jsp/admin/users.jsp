@@ -15,8 +15,9 @@
 <body ng-app="showApp">
 <ctg:userheader/>
 <div class="about" id="catalog">
-  <span><h4 style="border-bottom: 1px solid white"><button><fmt:message key="label.all.users"/></button></h4></span>
+
   <div class="error_message">${successMessage}${errorMessage}${successRemove}</div>
+  <c:import url="/jsp/admin/ordersMenu.jsp"/>
   <div class="item-container">
     <table class="orders">
       <tr class="headings">
@@ -29,35 +30,39 @@
         <td></td>
         <td></td>
       </tr>
-      <c:forEach var="user" items="${users}">
+      <c:forEach var="appUser" items="${users}">
         <tr>
-          <td>${user.getId()}</td>
-          <td>${user.getLogin()}</td>
-          <td>${user.getCountOfSubmittedOrders()}</td>
-          <td>${user.getCountOfPaidOrders()}</td>
-          <td>${user.getCountOfUnpaidOrders()}</td>
-          <td>${user.getCountOfLateOrders()}</td>
+          <td>${appUser.getId()}</td>
+          <td>${appUser.getLogin()}</td>
+          <td>${appUser.getCountOfSubmittedOrders()}</td>
+          <td>${appUser.getCountOfPaidOrders()}</td>
+          <td>${appUser.getCountOfUnpaidOrders()}</td>
+          <td>${appUser.getCountOfLateOrders()}</td>
           <td>
             <button>
-              <a href="${pageContext.request.contextPath}/controller?command=view_user&id=${user.getId()}">
+              <a href="${pageContext.request.contextPath}/controller?command=view_user&id=${appUser.getId()}">
                 <fmt:message key="button.view.user"/>
               </a>
             </button>
           </td>
           <td>
-            <c:if test="${user.getCountOfLateOrders() > 0 && !user.isBanned()}">
-            <button>
-              <a href="${pageContext.request.contextPath}/controller?command=ban_user&id=${user.getId()}">
-                <fmt:message key="label.ban.user"/>
-              </a>
-            </button>
+            <c:if test="${appUser.getCountOfLateOrders() > 0 && !appUser.isBanned()}">
+              <form method="post" action="${pageContext.request.contextPath}/controller" >
+                <input type="hidden" name="id" value="${appUser.id}"/>
+                <input type="hidden" name="ban" value="true"/>
+                <button type="submit" name="command" value="ban_user">
+                  <fmt:message key="label.ban.user"/>
+                </button>
+              </form>
             </c:if>
-            <c:if test="${user.isBanned()}">
-              <button>
-                <a href="${pageContext.request.contextPath}/controller?command=unban_user&id=${user.getId()}">
+            <c:if test="${appUser.isBanned()}">
+              <form method="post" action="${pageContext.request.contextPath}/controller" >
+                <input type="hidden" name="id" value="${appUser.id}"/>
+                <input type="hidden" name="ban" value="false"/>
+                <button type="submit" name="command" value="ban_user">
                   <fmt:message key="button.unban"/>
-                </a>
-              </button>
+                </button>
+              </form>
             </c:if>
           </td>
         </tr>

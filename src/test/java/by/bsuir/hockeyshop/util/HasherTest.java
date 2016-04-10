@@ -1,5 +1,6 @@
 package by.bsuir.hockeyshop.util;
 
+import by.bsuir.hockeyshop.service.util.Hasher;
 import org.junit.Test;
 import static org.junit.Assert.*;
 

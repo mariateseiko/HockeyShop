@@ -8,6 +8,7 @@ import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
+import java.util.Locale;
 
 /**
  * Filters all incoming requests and check whether {@code MessageManager} for retrieving server-side messages is present
@@ -16,6 +17,7 @@ import java.io.IOException;
 @WebFilter(urlPatterns = {"/*"})
 public class LocaleFilter implements Filter {
     static final String ATTR_MESSAGE_MANAGER = "messageManager";
+    static final String ATTR_LOCALE = "locale";
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
     }
@@ -26,17 +28,20 @@ public class LocaleFilter implements Filter {
         HttpSession session = request.getSession();
         if (session.getAttribute(ATTR_MESSAGE_MANAGER) == null) {
             MessageManager messageManager;
+            String locale = "en_US";
             switch(request.getLocale().getLanguage()) {
                 case "en":
                     messageManager = MessageManager.EN;
                     break;
                 case "ru":
                     messageManager = MessageManager.RU;
+                    locale = "ru_RU";
                     break;
                 default:
                     messageManager = MessageManager.EN;
             }
             session.setAttribute(ATTR_MESSAGE_MANAGER, messageManager);
+            session.setAttribute(ATTR_LOCALE, locale);
         }
         filterChain.doFilter(servletRequest, servletResponse);
     }

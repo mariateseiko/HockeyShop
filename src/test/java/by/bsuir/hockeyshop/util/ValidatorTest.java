@@ -1,5 +1,6 @@
 package by.bsuir.hockeyshop.util;
 
+import by.bsuir.hockeyshop.command.util.Validator;
 import org.junit.Test;
 import static org.junit.Assert.*;
 

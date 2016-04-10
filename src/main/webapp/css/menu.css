@@ -1,10 +1,10 @@
 a {
-  text-decoration: none;
+    text-decoration: none;
 }
 ul {
-list-style-type: none;
+    list-style-type: none;
 }
-.cd-dropdown-wrapper {
+.dropdown-wrapper {
   position: absolute;
 }
 .tests {
@@ -51,37 +51,37 @@ background-color: #04b5d4;
     padding-bottom: 5px;
 }
  
-.cd-dropdown h2,
-.cd-dropdown-content a,
-.cd-dropdown-content ul a,
-.cd-dropdown-content .cd-divider {
-  padding: 0 20px;
+.dropdown h2,
+.dropdown-content a,
+.dropdown-content ul a,
+.dropdown-content .cd-divider {
+    padding: 0 20px;
 }
 
-.cd-dropdown {
+.dropdown {
     z-index: 1;
     position: absolute;
     top: calc(100% - 3px);
-     background-color: #ffffff;
+    background-color: #ffffff;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.7);
     opacity: 0;
     transform: translateY(30px);
     transition: opacity 0.3s 0s, visibility 0s 0.3s, transform 0.3s 0s;
 }
 
-.cd-dropdown.dropdown-is-active {
-opacity: 1;
-transform: translateY(0);
-transition: opacity 0.3s 0s, visibility 0.3s 0s, transform 0.3s 0s;
+.dropdown.dropdown-is-active {
+    opacity: 1;
+    transform: translateY(0);
+    transition: opacity 0.3s 0s, visibility 0.3s 0s, transform 0.3s 0s;
 }
 
-.cd-dropdown-content a, .cd-dropdown-content ul a {
+.dropdown-content a, .dropdown-content ul a {
   display: block;
   border-top-width: 1px;
   border-style: solid;
 }
 
-.cd-dropdown-content .cd-divider, .cd-dropdown-content ul .cd-divider {
+.dropdown-content .cd-divider, .dropdown-content ul .cd-divider {
   padding-top: 10px;
   padding-bottom: 10px;
   font-size: 1.1rem;
@@ -89,26 +89,23 @@ transition: opacity 0.3s 0s, visibility 0.3s 0s, transform 0.3s 0s;
   letter-spacing: 1px;
   text-transform: uppercase;
 }
-.cd-dropdown-content .cd-divider + li > a, .cd-dropdown-content ul .cd-divider + li > a {
-  border-top-width: 0;
-}
   
-  .cd-dropdown-content a, .cd-dropdown-content ul a {
+.dropdown-content a, .dropdown-content ul a {
     color: #111433;
     line-height: 50px;
     border-color: #ebebeb;
-  }
-  .cd-dropdown-content .cd-divider, .cd-dropdown-content ul .cd-divider {
+}
+.dropdown-content .cd-divider, .dropdown-content ul .cd-divider {
     background-color: transparent;
     color: #b3b3b3;
     border-top: 1px solid #ebebeb;
-  }
-  .cd-dropdown-content .cd-divider + li > a, .cd-dropdown-content ul .cd-divider + li > a {
+}
+.dropdown-content .cd-divider + li > a, .dropdown-content ul .cd-divider + li > a {
     border-top-width: 1px;
-  }
+}
  
-.cd-dropdown-content {
-height: auto;
-width: 280px;
+.dropdown-content {
+    height: auto;
+    width: 280px;
 }
  

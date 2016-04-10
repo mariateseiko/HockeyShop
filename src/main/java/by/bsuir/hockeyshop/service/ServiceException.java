@@ -1,5 +1,8 @@
 package by.bsuir.hockeyshop.service;
 
+/**
+ * Represents an exception that may be thrown on the service layer
+ */
 public class ServiceException extends Exception {
     public ServiceException() {
         super();

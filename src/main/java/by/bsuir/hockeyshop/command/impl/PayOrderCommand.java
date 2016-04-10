@@ -3,10 +3,12 @@ package by.bsuir.hockeyshop.command.impl;
 import by.bsuir.hockeyshop.command.ActionCommand;
 import by.bsuir.hockeyshop.command.CommandException;
 
+import by.bsuir.hockeyshop.command.util.ActionResult;
 import by.bsuir.hockeyshop.service.OrderService;
 import by.bsuir.hockeyshop.service.ServiceException;
 
 import by.bsuir.hockeyshop.service.impl.OrderServiceImpl;
+import by.bsuir.hockeyshop.command.util.Validator;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -15,13 +17,13 @@ import javax.servlet.http.HttpServletRequest;
  * for paying for an earlier submitted order
  */
 public class PayOrderCommand implements ActionCommand {
-    private static final OrderService ORDER_SERVICE = OrderServiceImpl.getInstance();
-    static final String PARAM_CARD = "card";
-    static final String PARAM_ORDER_ID = "id";
-    static final String ATTR_SUCCESS = "successMessage";
-    static final String ATTR_ERROR = "errorMessage";
-    static final String ATTR_MESSAGE_MANAGER = "messageManager";
-    static final String COMMAND_VIEW_ORDER_ITEMS = "/controller?command=view_order_items&id=";
+    private static OrderService orderService = OrderServiceImpl.getInstance();
+
+    private static final String PARAM_CARD = "card";
+    private static final String PARAM_ORDER_ID = "id";
+    private static final String ATTR_SUCCESS = "successMessage";
+    private static final String ATTR_ERROR = "errorMessage";
+    private static final String COMMAND_VIEW_ORDER_ITEMS = "/controller?command=view_order_items&id=";
 
     /**
      * Handles request to the servlet by trying to make a payment for a specified order
@@ -35,12 +37,16 @@ public class PayOrderCommand implements ActionCommand {
         try {
             long orderId = Long.parseLong(request.getParameter(PARAM_ORDER_ID));
             String card = request.getParameter(PARAM_CARD);
-            String resultAttr = ATTR_ERROR;
-            if (ORDER_SERVICE.payForOrder(orderId, card)) {
-                resultAttr = ATTR_SUCCESS;
+            if (Validator.validateCard(card)) {
+                String resultAttr = ATTR_ERROR;
+                if (orderService.payForOrder(orderId, card)) {
+                    resultAttr = ATTR_SUCCESS;
+                }
+                request.getSession().setAttribute(resultAttr, ActionResult.ORDER_PAID);
+            } else {
+                request.getSession().setAttribute(ATTR_ERROR, ActionResult.VALIDATION_FAILED);
             }
-            request.getSession().setAttribute(resultAttr, ActionResult.ORDER_PAID);
-            page = COMMAND_VIEW_ORDER_ITEMS+orderId;
+            page = COMMAND_VIEW_ORDER_ITEMS + orderId;
         } catch (ServiceException e) {
             throw new CommandException(e);
         }

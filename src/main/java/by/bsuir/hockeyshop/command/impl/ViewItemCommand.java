@@ -2,7 +2,7 @@ package by.bsuir.hockeyshop.command.impl;
 
 import by.bsuir.hockeyshop.command.ActionCommand;
 import by.bsuir.hockeyshop.command.CommandException;
-import by.bsuir.hockeyshop.command.MessageAdder;
+import by.bsuir.hockeyshop.command.util.MessageAdder;
 import by.bsuir.hockeyshop.entity.Item;
 import by.bsuir.hockeyshop.managers.ConfigurationManager;
 import by.bsuir.hockeyshop.managers.MessageManager;
@@ -17,13 +17,14 @@ import javax.servlet.http.HttpServletRequest;
  * for viewing an item's info
  */
 public class ViewItemCommand implements ActionCommand {
-    static final String PARAM_ITEM_ID = "id";
-    static final String PARAM_DIRECTION = "dir";
-    static final String PARAM_LAST_PAGE = "lastPage";
-    static final String ATTR_ITEM = "item";
-    static final String ATTR_ERROR = "errorMessage";
-    static final String ATTR_MESSAGE_MANAGER = "messageManager";
-    private static final ItemService ITEM_SERVICE = ItemServiceImpl.getInstance();
+    private static final String PARAM_ITEM_ID = "id";
+    private static final String PARAM_DIRECTION = "dir";
+    private static final String PARAM_LAST_PAGE = "lastPage";
+    private static final String ATTR_ITEM = "item";
+    private static final String ATTR_ERROR = "errorMessage";
+    private static final String ATTR_MESSAGE_MANAGER = "messageManager";
+
+    private static ItemService itemService = ItemServiceImpl.getInstance();
 
     /**
      * Handles request to the servlet by retrieving a specified item's info
@@ -37,7 +38,7 @@ public class ViewItemCommand implements ActionCommand {
         Item item;
         long itemId = Long.parseLong(request.getParameter(PARAM_ITEM_ID));
         try {
-            if ((item = ITEM_SERVICE.selectItem(itemId)) != null) {
+            if ((item = itemService.selectItem(itemId)) != null) {
                 request.setAttribute(ATTR_ITEM, item);
                 String lastPage = request.getParameter(PARAM_LAST_PAGE);
                 String dir = request.getParameter(PARAM_DIRECTION);

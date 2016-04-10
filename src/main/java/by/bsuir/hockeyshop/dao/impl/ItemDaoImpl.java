@@ -7,6 +7,7 @@ import by.bsuir.hockeyshop.entity.ItemType;
 import by.bsuir.hockeyshop.dao.DaoException;
 import by.bsuir.hockeyshop.pool.ConnectionPool;
 import by.bsuir.hockeyshop.managers.ConfigurationManager;
+import org.apache.log4j.Logger;
 
 import java.io.File;
 import java.sql.Connection;
@@ -19,52 +20,51 @@ import java.util.List;
 /**
  * {@inheritDoc}
  *
- * This implementation is based on JDBC and MySQL. It is also a singleton. Connecetions are taken and returned to the pool
+ * This implementation is based on JDBC and MySQL. It is also a singleton. Connections are taken and returned to the pool
  * in each method.
  */
 public class ItemDaoImpl implements ItemDao {
-    static final String GET_ITEMS_BY_TYPE_ORDER_BY_PRICE_DESC = "SELECT item_id, item.name, size, color, price, image_path " +
+    private static final String SELECT_ITEMS_BY_TYPE_ORDER_BY_PRICE_DESC = "SELECT item.item_id, item.name, item_status.name AS `status`, " +
+            "size, color, item_price.price, image_path " +
+            "FROM item " +
+            "JOIN item_type ON item.type_id = item_type.type_id " +
+            "JOIN item_status ON item.status_id = item_status.status_id " +
+            "JOIN item_price ON item.item_id = item_price.item_id AND now() <= item_price.ends " +
+            "WHERE item_type.name = ? ORDER BY price DESC LIMIT ?, ?";
+    private static final String SELECT_ITEMS_BY_TYPE_ORDER_BY_PRICE_ASC = "SELECT item.item_id, item.name, item_status.name AS `status`, " +
+            "size, color, item_price.price, image_path " +
             "FROM item " +
             "JOIN item_status ON item.status_id = item_status.status_id " +
             "JOIN item_type ON item.type_id = item_type.type_id " +
-            "WHERE item_type.name = ? AND item_status.name = 'IN_STOCK' ORDER BY price DESC LIMIT ?, ?";
-    static final String GET_ITEMS_BY_TYPE_ORDER_BY_PRICE_ASC = "SELECT item_id, item.name, size, color, price, image_path " +
-            "FROM item " +
-            "JOIN item_status ON item.status_id = item_status.status_id " +
-            "JOIN item_type ON item.type_id = item_type.type_id " +
-            "WHERE item_type.name = ? AND item_status.name = 'IN_STOCK' ORDER BY price ASC LIMIT ?, ?";
-    static final String GET_ITEMS_COUNT_BY_TYPE = "SELECT COUNT(item_id) AS count " +
+            "JOIN item_price ON item.item_id = item_price.item_id AND now() <= item_price.ends " +
+            "WHERE item_type.name = ? ORDER BY price ASC LIMIT ?, ?";
+    private static final String SELECT_ITEMS_COUNT_BY_TYPE = "SELECT COUNT(item_id) AS count " +
             "FROM item " +
             "JOIN item_type ON item.type_id = item_type.type_id " +
             "WHERE item_type.name = ?";
-    static final String INSERT_ITEM = "INSERT INTO item (name, size, color, price, type_id, status_id, image_path, " +
+    private static final String INSERT_ITEM = "INSERT INTO item (`name`, size, color, type_id, status_id, image_path, " +
             "additional_info, description) " +
-            "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
-    static final String GET_TYPE_ID_BY_NAME = "SELECT type_id FROM item_type " +
+            "VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+    private static final String INSERT_INITIAL_PRICE = "INSERT INTO item_price (item_id, price) VALUES (LAST_INSERT_ID(), ?)";
+    private static final String INSERT_NEW_PRICE = "INSERT INTO item_price (item_id, price, `starts`) VALUES " +
+            "(?, ?, (SELECT e FROM (SELECT DISTINCT MAX(`ends`) AS e FROM item_price WHERE item_id=?) AS temp))";
+    private static final String SELECT_TYPE_ID_BY_NAME = "SELECT type_id FROM item_type " +
             "WHERE name=?";
-    static final String GET_STATUS_ID_BY_NAME = "SELECT status_id FROM item_status " +
+    private static final String SELECT_STATUS_ID_BY_NAME = "SELECT status_id FROM item_status " +
             "WHERE name=?";
-    static final String UPDATE_ITEM_PRICE = "UPDATE item SET price=? " +
-            "WHERE item_id=? AND item_id NOT IN " +
-            "(SELECT item_id FROM " +
-            "(SELECT DISTINCT item.item_id FROM item " +
-            "JOIN order_item ON item.item_id=order_item.item_id " +
-            "JOIN `order` ON order_item.order_id = `order`.order_id " +
-            "WHERE payment_date = 0) AS temp)";
-    static final String UPDATE_ITEM_STATUS = "UPDATE item SET status_id=? " +
+    private static final String UPDATE_END_DATE = "UPDATE item_price SET `ends` = now() WHERE `ends` > now() AND item_id=?";
+    private static final String UPDATE_ITEM_STATUS = "UPDATE item SET status_id=? " +
             "WHERE item_id=?";
-    static final String GET_ITEM_BY_ID = "SELECT item_id, item.name, size, color, price, item_status.name AS status, item_type.name AS type, image_path, " +
+    private static final String SELECT_ITEM_BY_ID = "SELECT item.item_id, item.name, size, color, item_price.price, item_status.name AS status, item_type.name AS type, image_path, " +
             "additional_info, description " +
             "FROM item " +
             "JOIN item_type ON item.type_id = item_type.type_id "+
+            "JOIN item_price ON item.item_id = item_price.item_id AND now() <= item_price.ends " +
             "JOIN item_status ON item.status_id = item_status.status_id " +
-            "WHERE item_id = ?";
-
+            "WHERE item.item_id = ?";
 
     private static ItemDao instance = new ItemDaoImpl();
-
     private ItemDaoImpl() {}
-
     public static ItemDao getInstance() {
         return instance;
     }
@@ -73,7 +73,7 @@ public class ItemDaoImpl implements ItemDao {
     public List<Item> selectItemsByTypeOrderedByPriceAsc(String type, int offset, int limit) throws DaoException {
         List<Item> items = new ArrayList<>();
         try(Connection cn = ConnectionPool.getInstance().takeConnection();
-            PreparedStatement st = cn.prepareStatement(GET_ITEMS_BY_TYPE_ORDER_BY_PRICE_ASC)) {
+            PreparedStatement st = cn.prepareStatement(SELECT_ITEMS_BY_TYPE_ORDER_BY_PRICE_ASC)) {
             st.setString(1, type);
             st.setInt(2, offset);
             st.setInt(3, limit);
@@ -85,6 +85,7 @@ public class ItemDaoImpl implements ItemDao {
                 item.setSize(resultSet.getString("size"));
                 item.setColor(resultSet.getString("color"));
                 item.setPrice(resultSet.getInt("price"));
+                item.setStatus(ItemStatus.valueOf(resultSet.getString("status")));
                 item.setImagePath(ConfigurationManager.getProperty("path.items")
                         + File.separator+resultSet.getString("image_path"));
                 items.add(item);
@@ -99,7 +100,7 @@ public class ItemDaoImpl implements ItemDao {
     public List<Item> selectItemsByTypeOrderedByPriceDesc(String type, int offset, int limit) throws DaoException {
         List<Item> items = new ArrayList<>();
         try(Connection cn = ConnectionPool.getInstance().takeConnection();
-            PreparedStatement st = cn.prepareStatement(GET_ITEMS_BY_TYPE_ORDER_BY_PRICE_DESC)) {
+            PreparedStatement st = cn.prepareStatement(SELECT_ITEMS_BY_TYPE_ORDER_BY_PRICE_DESC)) {
             st.setString(1, type);
             st.setInt(2, offset);
             st.setInt(3, limit);
@@ -111,6 +112,7 @@ public class ItemDaoImpl implements ItemDao {
                 item.setSize(resultSet.getString("size"));
                 item.setColor(resultSet.getString("color"));
                 item.setPrice(resultSet.getInt("price"));
+                item.setStatus(ItemStatus.valueOf(resultSet.getString("status")));
                 item.setImagePath(ConfigurationManager.getProperty("path.items")
                         + File.separator+resultSet.getString("image_path"));
                 items.add(item);
@@ -124,7 +126,7 @@ public class ItemDaoImpl implements ItemDao {
     @Override
     public int selectItemsCountByType(String type) throws DaoException {
         try(Connection cn = ConnectionPool.getInstance().takeConnection();
-            PreparedStatement st = cn.prepareStatement(GET_ITEMS_COUNT_BY_TYPE)) {
+            PreparedStatement st = cn.prepareStatement(SELECT_ITEMS_COUNT_BY_TYPE)) {
             st.setString(1, type);
             ResultSet resultSet = st.executeQuery();
             if (resultSet.next()) {
@@ -133,25 +135,27 @@ public class ItemDaoImpl implements ItemDao {
         } catch (SQLException e) {
             throw new DaoException("Request to database failed", e);
         }
-        return 0;
+        return -1;
     }
 
     @Override
     public boolean insertItem(Item item) throws DaoException {
         try(Connection cn = ConnectionPool.getInstance().takeConnection();
-            PreparedStatement st = cn.prepareStatement(INSERT_ITEM)) {
-            st.setString(1, item.getName());
-            st.setString(2, item.getSize());
-            st.setString(3, item.getColor());
-            st.setInt(4, item.getPrice());
-            st.setLong(5, getTypeIdByName(item.getType()));
-            st.setLong(6, getStatusIdByName(item.getStatus()));
-            st.setString(7, item.getImagePath());
-            st.setString(8, item.getAdditionalInfo());
-            st.setString(9, item.getDescription());
-            if (st.executeUpdate() == 0) {
-                return false;
-            }
+            PreparedStatement stItem = cn.prepareStatement(INSERT_ITEM);
+            PreparedStatement stPrice = cn.prepareStatement(INSERT_INITIAL_PRICE)) {
+            cn.setAutoCommit(false);
+            stItem.setString(1, item.getName());
+            stItem.setString(2, item.getSize());
+            stItem.setString(3, item.getColor());
+            stItem.setLong(4, selectTypeIdByName(item.getType()));
+            stItem.setLong(5, selectStatusIdByName(item.getStatus()));
+            stItem.setString(6, item.getImagePath());
+            stItem.setString(7, item.getAdditionalInfo());
+            stItem.setString(8, item.getDescription());
+            stItem.executeUpdate();
+            stPrice.setInt(1, item.getPrice());
+            stPrice.executeUpdate();
+            cn.commit();
         } catch (SQLException e) {
             throw new DaoException("Request to database failed", e);
         }
@@ -159,46 +163,50 @@ public class ItemDaoImpl implements ItemDao {
     }
 
 
-    long getTypeIdByName(ItemType type) throws SQLException {
+    long selectTypeIdByName(ItemType type) throws SQLException {
         try(Connection cn = ConnectionPool.getInstance().takeConnection();
-            PreparedStatement st = cn.prepareStatement(GET_TYPE_ID_BY_NAME)) {
+            PreparedStatement st = cn.prepareStatement(SELECT_TYPE_ID_BY_NAME)) {
             st.setString(1, type.toString());
             ResultSet resultSet = st.executeQuery();
             resultSet.next();
-            return resultSet.getInt("type_id");
+            return resultSet.getLong("type_id");
         }
     }
 
-    long getStatusIdByName(ItemStatus status) throws SQLException {
+    long selectStatusIdByName(ItemStatus status) throws SQLException {
         try(Connection cn = ConnectionPool.getInstance().takeConnection();
-            PreparedStatement st = cn.prepareStatement(GET_STATUS_ID_BY_NAME)) {
+            PreparedStatement st = cn.prepareStatement(SELECT_STATUS_ID_BY_NAME)) {
             st.setString(1, status.toString());
             ResultSet resultSet = st.executeQuery();
             resultSet.next();
-            return resultSet.getInt("status_id");
+            return resultSet.getLong("status_id");
         }
     }
 
     @Override
     public boolean updateItemPrice(long id, int price) throws DaoException {
-        try(Connection cn = ConnectionPool.getInstance().takeConnection();
-            PreparedStatement st = cn.prepareStatement(UPDATE_ITEM_PRICE)) {
-            st.setInt(1, price);
-            st.setLong(2, id);
-            if (st.executeUpdate() > 0) {
-                return true;
-            }
+        Connection cn = ConnectionPool.getInstance().takeConnection();
+        try (PreparedStatement stNew = cn.prepareStatement(INSERT_NEW_PRICE);
+            PreparedStatement stOld = cn.prepareStatement(UPDATE_END_DATE)){
+            cn.setAutoCommit(false);
+            stOld.setLong(1, id);
+            stOld.executeUpdate();
+            stNew.setLong(1, id);
+            stNew.setInt(2, price);
+            stNew.setLong(3, id);
+            stNew.executeUpdate();
+            cn.commit();
         } catch (SQLException e) {
             throw new DaoException("Request to database failed", e);
         }
-        return false;
+        return true;
     }
 
     @Override
     public boolean updateItemStatus(long id, ItemStatus status) throws DaoException {
         try(Connection cn = ConnectionPool.getInstance().takeConnection();
             PreparedStatement st = cn.prepareStatement(UPDATE_ITEM_STATUS)) {
-            st.setLong(1, getStatusIdByName(status));
+            st.setLong(1, selectStatusIdByName(status));
             st.setLong(2, id);
             if (st.executeUpdate() > 0) {
                 return true;
@@ -213,7 +221,7 @@ public class ItemDaoImpl implements ItemDao {
     public Item selectItemById(long id) throws DaoException {
         Item item = new Item();
         try(Connection cn = ConnectionPool.getInstance().takeConnection();
-            PreparedStatement st = cn.prepareStatement(GET_ITEM_BY_ID)) {
+            PreparedStatement st = cn.prepareStatement(SELECT_ITEM_BY_ID)) {
             st.setLong(1, id);
             ResultSet resultSet = st.executeQuery();
             resultSet.next();

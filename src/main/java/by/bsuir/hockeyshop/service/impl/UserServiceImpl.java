@@ -9,19 +9,21 @@ import by.bsuir.hockeyshop.entity.UserRole;
 import by.bsuir.hockeyshop.dao.DaoException;
 import by.bsuir.hockeyshop.service.ServiceException;
 import by.bsuir.hockeyshop.service.UserService;
-import by.bsuir.hockeyshop.util.Hasher;
+import by.bsuir.hockeyshop.service.util.Hasher;
 
 import java.util.List;
 
+/**
+ * {@inheritDoc}
+ *
+ * A singleton implementation of the {@link UserService} interface, using {@link UserDaoImpl} as an underlying level
+ */
 public class UserServiceImpl implements UserService {
     private static UserDao userDao = UserDaoImpl.getInstance();
-    private static OrderDao orderDao;
+    private static OrderDao orderDao = OrderDaoImpl.getInstance();
     private static UserService instance = new UserServiceImpl();
 
-    private UserServiceImpl() {
-       // userDao = UserDaoImpl.getInstance();
-        orderDao = OrderDaoImpl.getInstance();
-    }
+    private UserServiceImpl() { }
 
     public static UserService getInstance() {
         return instance;
@@ -81,10 +83,10 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<User> selectUsers(int limit, int offset) throws ServiceException{
+    public List<User> selectUsers() throws ServiceException{
         List<User> users;
         try {
-            users = userDao.selectUsers(limit, offset);
+            users = userDao.selectUsers();
             for (User user: users) {
                 user.setCountOfSubmittedOrders(orderDao.selectSubmittedOrdersCountByUser(user.getId()));
                 user.setCountOfPaidOrders(orderDao.selectPaidOrdersCountByUser(user.getId()));
@@ -96,6 +98,4 @@ public class UserServiceImpl implements UserService {
         }
         return users;
     }
-
-
 }

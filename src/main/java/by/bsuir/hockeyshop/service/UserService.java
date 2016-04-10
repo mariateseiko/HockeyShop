@@ -5,7 +5,7 @@ import by.bsuir.hockeyshop.entity.User;
 import java.util.List;
 
 /**
- * Represents an interface for user-related actions
+ * Represents an interface of a service for user-related actions
  */
 public interface UserService {
     /**
@@ -45,11 +45,9 @@ public interface UserService {
     User selectUser(long userId) throws ServiceException;
 
     /**
-     * Retrieves a list of users from a specified offset with a given limit
-     * @param limit maximum number of users in the list
-     * @param offset offset from the start of the list of all users
+     * Retrieves a list of all client users
      * @return a list of users from the given offset
      * @throws ServiceException if DaoException occurred
      */
-    List<User> selectUsers(int limit, int offset) throws ServiceException;
+    List<User> selectUsers() throws ServiceException;
 }

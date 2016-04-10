@@ -11,8 +11,8 @@ import javax.servlet.http.HttpServletRequest;
  * for changing locale for the session
  */
 public class ChangeLocaleCommand implements ActionCommand {
-    static final String PARAM_LOCALE = "locale";
-    static final String ATTR_MESSAGE_MANAGER = "messageManager";
+    private static final String PARAM_LOCALE = "locale";
+    private static final String ATTR_MESSAGE_MANAGER = "messageManager";
 
     /**
      * Handles request to the servlet by changing the locale for the session

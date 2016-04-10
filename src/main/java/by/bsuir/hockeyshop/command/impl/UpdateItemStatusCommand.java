@@ -1,6 +1,7 @@
 package by.bsuir.hockeyshop.command.impl;
 
 import by.bsuir.hockeyshop.command.ActionCommand;
+import by.bsuir.hockeyshop.command.util.ActionResult;
 import by.bsuir.hockeyshop.entity.ItemStatus;
 import by.bsuir.hockeyshop.command.CommandException;
 import by.bsuir.hockeyshop.service.ServiceException;
@@ -14,13 +15,12 @@ import javax.servlet.http.HttpServletRequest;
  * for updating an existing item's status
  */
 public class UpdateItemStatusCommand implements ActionCommand {
-    private static final ItemService ITEM_SERVICE = ItemServiceImpl.getInstance();
-    static final String ATTR_USER = "user";
-    static final String PARAM_ID = "id";
-    static final String PARAM_STATUS = "status";
-    static final String ATTR_SUCCESS = "successMessage";
-    static final String ATTR_ERROR = "errorMessage";
-    static final String COMMAND_VIEW_ITEM = "/controller?command=view_item&id=";
+    private static ItemService itemService = ItemServiceImpl.getInstance();
+    private static final String PARAM_ID = "id";
+    private static final String PARAM_STATUS = "status";
+    private static final String ATTR_SUCCESS = "successMessage";
+    private static final String ATTR_ERROR = "errorMessage";
+    private static final String COMMAND_VIEW_ITEM = "/controller?command=view_item&id=";
 
     /**
      * Handles request to the servlet by trying to update status of a specified item
@@ -35,7 +35,7 @@ public class UpdateItemStatusCommand implements ActionCommand {
             long itemId = Long.parseLong(request.getParameter(PARAM_ID));
             ItemStatus status = ItemStatus.valueOf(request.getParameter(PARAM_STATUS).toUpperCase());
             String resultAttr = ATTR_ERROR;
-            if (ITEM_SERVICE.updateItemStatus(itemId, status)) {
+            if (itemService.updateItemStatus(itemId, status)) {
                 resultAttr = ATTR_SUCCESS;
             }
             request.getSession().setAttribute(resultAttr, ActionResult.STATUS_UPDATED);

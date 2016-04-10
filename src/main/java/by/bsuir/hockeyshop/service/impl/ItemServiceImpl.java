@@ -12,6 +12,11 @@ import by.bsuir.hockeyshop.service.ItemService;
 
 import java.util.List;
 
+/**
+ * {@inheritDoc}
+ *
+ * A singleton implementation of the {@link ItemService} interface, using {@link ItemDaoImpl} as an underlying level
+ */
 public class ItemServiceImpl implements ItemService {
     private static ItemDao itemDao;
     private static ItemService instance = new ItemServiceImpl();
@@ -67,11 +72,6 @@ public class ItemServiceImpl implements ItemService {
         Item item;
         try {
             item = itemDao.selectItemById(id);
-            if (item != null) {
-                if (item.getImagePath() == null) {
-                    item.setImagePath(ConfigurationManager.getProperty("path.image.default"));
-                }
-            }
         } catch (DaoException e) {
             throw new ServiceException(e);
         }
@@ -90,6 +90,9 @@ public class ItemServiceImpl implements ItemService {
     @Override
     public boolean addItem(Item item) throws ServiceException {
         try {
+            if (item.getImagePath() == null) {
+                item.setImagePath(ConfigurationManager.getProperty("path.image.default"));
+            }
             return itemDao.insertItem(item);
         } catch (DaoException e) {
             throw new ServiceException(e);

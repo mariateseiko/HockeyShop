@@ -15,6 +15,9 @@ import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.locks.ReentrantLock;
 
+/**
+ * A pool of {@link ProxyConnection} connections for database access. A thread-safe singleton.
+ */
 public class ConnectionPool {
     final static Logger LOG = Logger.getLogger(ConnectionPool.class);
     private BlockingQueue<ProxyConnection> pool;
@@ -43,7 +46,7 @@ public class ConnectionPool {
             LOG.fatal("Connection pool can't be created due to SQL problems");
             throw new RuntimeException();
         }
-        int count = 100;
+        int count = 30;
         while(pool.size() != poolSize && count > 0) {
             try {
                 pool.offer(new ProxyConnection(DriverManager.getConnection(DatabaseManager.getProperty("url"), prop)));
@@ -52,9 +55,11 @@ public class ConnectionPool {
             }
             count--;
         }
+        if (pool.size() != poolSize) {
+            throw new RuntimeException("Failed to create connection pool");
+        }
     }
 
-    @PostConstruct
     public static ConnectionPool getInstance() {
         if (isNull.get()) {
             lock.lock();
@@ -70,6 +75,10 @@ public class ConnectionPool {
         return instance;
     }
 
+    /**
+     * Retrieves a connection from the pool's queue
+     * @return a connection to the db, {@code null} if the pool is closed
+     */
     public Connection takeConnection() {
         Connection connection = null;
         try {
@@ -82,7 +91,13 @@ public class ConnectionPool {
         return connection;
     }
 
+    /**
+     * Returns connection back to the pool
+     * @param connection connection to return
+     * @return {@code true} if succeeded, {@code false} if the connection is null
+     */
     public boolean returnConnection(ProxyConnection connection) {
+        LOG.debug("Returning connection to the pool");
         if (connection != null) {
             pool.offer(connection);
             return true;
@@ -90,8 +105,13 @@ public class ConnectionPool {
         return false;
     }
 
+    /**
+     * Shuts down the pool. Marks the pool as closed, waits for a second for all connections to return and then tries
+     * to close them all.
+     */
     @PreDestroy
     public void closePool()  {
+        LOG.debug("Closing pool, pool size is " + pool.size());
         isClosed.set(true);
         try {
             Thread.sleep(1000);
@@ -105,5 +125,6 @@ public class ConnectionPool {
                 LOG.error("Error occurred while destroying pool connection");
             }
         }
+        LOG.debug("Pool closed");
     }
 }

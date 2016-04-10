@@ -1,6 +1,5 @@
-package by.bsuir.hockeyshop.command;
+package by.bsuir.hockeyshop.command.util;
 
-import by.bsuir.hockeyshop.command.impl.ActionResult;
 import by.bsuir.hockeyshop.managers.MessageManager;
 
 import javax.servlet.http.HttpServletRequest;

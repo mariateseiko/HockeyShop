@@ -2,10 +2,9 @@ package by.bsuir.hockeyshop.command.impl;
 
 import by.bsuir.hockeyshop.command.ActionCommand;
 import by.bsuir.hockeyshop.command.CommandException;
-import by.bsuir.hockeyshop.command.CommandStorage;
+import by.bsuir.hockeyshop.command.util.ActionResult;
 import by.bsuir.hockeyshop.entity.User;
 import by.bsuir.hockeyshop.listener.SessionListener;
-import by.bsuir.hockeyshop.managers.MessageManager;
 import by.bsuir.hockeyshop.service.ServiceException;
 import by.bsuir.hockeyshop.service.UserService;
 import by.bsuir.hockeyshop.service.impl.UserServiceImpl;
@@ -19,15 +18,13 @@ import java.util.Map;
  * for banning or unbanning users
  */
 public class BanUserCommand implements ActionCommand {
-    static final String ATTR_USER = "user";
-    static final String PARAM_USER_ID = "id";
-    static final String PARAM_LOGIN_ERROR_MESSAGE = "loginErrorMessage";
-    static final UserService userService = UserServiceImpl.getInstance();
-    static final String ATTR_MESSAGE_MANAGER = "messageManager";
-    static final String VIEW_USER_COMMAND = "view_user";
-    static final String ATTR_SUCCESS = "successMessage";
-    static final String ATTR_ERROR = "errorMessage";
-    static final String ATTR_BAN = "ban";
+    private static final String PARAM_USER_ID = "id";
+    private static final String COMMAND_VIEW_USER = "/controller?command=view_user&id=";
+    private static final String ATTR_SUCCESS = "successMessage";
+    private static final String ATTR_ERROR = "errorMessage";
+    private static final String ATTR_BAN = "ban";
+
+    private static UserService userService = UserServiceImpl.getInstance();
 
     /**
      * Handles request to the servlet by banning or unbanning a user with specified id
@@ -41,11 +38,10 @@ public class BanUserCommand implements ActionCommand {
         String page;
         Long id = Long.parseLong(request.getParameter(PARAM_USER_ID));
         Boolean ban = Boolean.parseBoolean(request.getParameter(ATTR_BAN));
-        MessageManager messageManager = (MessageManager)(request.getSession().getAttribute(ATTR_MESSAGE_MANAGER));
         try {
             if (userService.changeUserBanStatus(id, ban)) {
                 if (ban) {
-                    request.setAttribute(ATTR_SUCCESS, messageManager.getProperty("message.ban.success"));
+                    request.getSession().setAttribute(ATTR_SUCCESS, ActionResult.USER_BANNED);
                     Map<String, HttpSession> sessions = SessionListener.getSessionMap();
                     for(HttpSession session: sessions.values()) {
                         User user = (User)session.getAttribute("user");
@@ -55,17 +51,16 @@ public class BanUserCommand implements ActionCommand {
                         }
                     }
                 } else {
-                    request.setAttribute(ATTR_SUCCESS, messageManager.getProperty("message.unban.success"));
+                    request.getSession().setAttribute(ATTR_SUCCESS, ActionResult.USER_UNBANNED);
                 }
-                request.setAttribute(PARAM_LOGIN_ERROR_MESSAGE, messageManager.getProperty("message.login.error"));
             } else {
                 if (ban) {
-                    request.setAttribute(ATTR_ERROR, messageManager.getProperty("message.ban.error"));
+                    request.getSession().setAttribute(ATTR_ERROR, ActionResult.USER_BANNED);
                 } else {
-                    request.setAttribute(ATTR_ERROR, messageManager.getProperty("message.unban.error"));
+                    request.getSession().setAttribute(ATTR_ERROR, ActionResult.USER_UNBANNED);
                 }
             }
-            page = CommandStorage.getInstance().getCommand(VIEW_USER_COMMAND).execute(request);
+            page = COMMAND_VIEW_USER + id;
         } catch (ServiceException e) {
             throw new CommandException(e);
         }

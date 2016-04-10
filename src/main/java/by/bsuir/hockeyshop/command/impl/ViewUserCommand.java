@@ -2,6 +2,7 @@ package by.bsuir.hockeyshop.command.impl;
 
 import by.bsuir.hockeyshop.command.ActionCommand;
 import by.bsuir.hockeyshop.command.CommandException;
+import by.bsuir.hockeyshop.command.util.MessageAdder;
 import by.bsuir.hockeyshop.entity.User;
 import by.bsuir.hockeyshop.managers.ConfigurationManager;
 import by.bsuir.hockeyshop.managers.MessageManager;
@@ -16,11 +17,12 @@ import javax.servlet.http.HttpServletRequest;
  * for retrieving and displaying user's info
  */
 public class ViewUserCommand implements ActionCommand {
-    static final String PARAM_USER_ID = "id";
-    static final String ATTR_USER = "user";
-    static final String ATTR_ERROR = "errorMessage";
-    static final String ATTR_MESSAGE_MANAGER = "messageManager";
-    private static final UserService USER_SERVICE = UserServiceImpl.getInstance();
+    private static final String PARAM_USER_ID = "id";
+    private static final String ATTR_USER = "appUser";
+    private static final String ATTR_ERROR = "errorMessage";
+    private static final String ATTR_MESSAGE_MANAGER = "messageManager";
+
+    private static UserService userService = UserServiceImpl.getInstance();
 
     /**
      * Handles request to the servlet by retrieving and returning a specified user's information
@@ -34,8 +36,9 @@ public class ViewUserCommand implements ActionCommand {
         User user;
         long userId = Long.parseLong(request.getParameter(PARAM_USER_ID));
         try {
-            if ((user = USER_SERVICE.selectUser(userId)) != null) {
+            if ((user = userService.selectUser(userId)) != null) {
                 request.setAttribute(ATTR_USER, user);
+                MessageAdder.addMessage(request);
             } else {
                 MessageManager messageManager = (MessageManager)(request.getSession().getAttribute(ATTR_MESSAGE_MANAGER));
                 request.setAttribute(ATTR_ERROR, messageManager.getProperty("message.user.not.found"));

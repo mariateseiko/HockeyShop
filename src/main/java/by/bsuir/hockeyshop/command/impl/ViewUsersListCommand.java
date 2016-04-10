@@ -16,13 +16,10 @@ import java.util.List;
  * for retrieving and displaying list of all users
  */
 public class ViewUsersListCommand implements ActionCommand {
-    static final String ATTR_USERS = "users";
-    static final String PARAM_PAGE = "page";
-    static final String ATTR_ERROR_MESSAGE = "errorMessage";
-    static final String ATTR_MESSAGE_MANAGER = "messageManager";
-    static final int DEFAULT_START_PAGE = 1;
-    static final int MAX_USERS_PER_PAGE = 10;
-    private static final UserService USER_SERVICE = UserServiceImpl.getInstance();
+    private static final String ATTR_USERS = "users";
+    private static final String ATTR_ERROR_MESSAGE = "errorMessage";
+    private static final String ATTR_MESSAGE_MANAGER = "messageManager";
+    private static UserService userService = UserServiceImpl.getInstance();
 
     /**
      * Handles request to the servlet by retrieving a list of all users
@@ -36,13 +33,7 @@ public class ViewUsersListCommand implements ActionCommand {
         List<User> users;
         MessageManager messageManager = (MessageManager)(request.getSession().getAttribute(ATTR_MESSAGE_MANAGER));
         try {
-            int pageNumber; String pageNumberParam;
-            if ((pageNumberParam = request.getParameter(PARAM_PAGE)) != null) {
-                pageNumber = Integer.parseInt(pageNumberParam)+1;
-            } else {
-                pageNumber = DEFAULT_START_PAGE;
-            }
-            users = USER_SERVICE.selectUsers(MAX_USERS_PER_PAGE, (pageNumber-1)*MAX_USERS_PER_PAGE);
+            users = userService.selectUsers();
             if (users == null) {
                 request.setAttribute(ATTR_ERROR_MESSAGE,
                         messageManager.getProperty("message.users.nousers"));

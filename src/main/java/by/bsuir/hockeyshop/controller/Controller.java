@@ -4,6 +4,7 @@ import by.bsuir.hockeyshop.command.ActionCommand;
 import by.bsuir.hockeyshop.command.CommandStorage;
 import by.bsuir.hockeyshop.command.CommandException;
 import by.bsuir.hockeyshop.managers.ConfigurationManager;
+import by.bsuir.hockeyshop.pool.ConnectionPool;
 import org.apache.log4j.Logger;
 
 import javax.servlet.RequestDispatcher;
@@ -20,6 +21,7 @@ import java.io.IOException;
  */
 @WebServlet("/controller")
 @MultipartConfig
+
 public class Controller extends HttpServlet {
     final static Logger LOG = Logger.getLogger(Controller.class);
     private CommandStorage storage;
@@ -27,6 +29,7 @@ public class Controller extends HttpServlet {
     @Override
     public void init() throws ServletException {
         storage = CommandStorage.getInstance();
+        ConnectionPool.getInstance();
     }
 
     @Override
@@ -51,7 +54,9 @@ public class Controller extends HttpServlet {
         String page;
         try {
             ActionCommand command = storage.getCommand(req);
+            LOG.debug("Executing a " + command);
             page = command.execute(req);
+
             if (page != null) {
                 if (req.getMethod().equalsIgnoreCase("get")) {
                     RequestDispatcher dispatcher = getServletContext().getRequestDispatcher(page);

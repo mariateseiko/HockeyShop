@@ -4,9 +4,9 @@ package by.bsuir.hockeyshop.entity;
  * Represents item's status in the shop.
  */
 public enum ItemStatus {
-    IN_STOCK("in stock"),
-    OUT_OF_STOCK("out of stock"),
-    OUT_OF_PRODUCTION("out of production");
+    IN_STOCK("label.instock"),
+    OUT_OF_STOCK("label.outofstock"),
+    OUT_OF_PRODUCTION("label.outofproduction");
 
     private String name;
 

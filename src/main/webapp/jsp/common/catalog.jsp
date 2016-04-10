@@ -33,12 +33,12 @@
     </button>
   </h4></span>
   <span><h4><fmt:message key="label.sort.price"/>
-      <c:if test="${'desc'.equals(dir)}">
-        <button><a href="${pageContext.request.contextPath}/controller?command=catalog&type=${type}&page=${currentPage}&dir=asc">&#8593</a></button>
-      </c:if>
-      <c:if test="${'asc'.equals(dir)}">
-        <button><a href="${pageContext.request.contextPath}/controller?command=catalog&type=${type}&page=${currentPage}&dir=desc">&#8595</a></button>
-      </c:if>
+    <c:if test="${'desc'.equals(dir)}">
+      <button><a href="${pageContext.request.contextPath}/controller?command=catalog&type=${type}&page=${currentPage}&dir=asc">&#8593</a></button>
+    </c:if>
+    <c:if test="${'asc'.equals(dir)}">
+      <button><a href="${pageContext.request.contextPath}/controller?command=catalog&type=${type}&page=${currentPage}&dir=desc">&#8595</a></button>
+    </c:if>
   </h4></span>
   <div class="item-container">
     <c:forEach var="item" items="${items}">
@@ -52,31 +52,47 @@
           <div class="info"><span class="info-label"><fmt:message key="label.color"/></span><span class="info-value">${item.getColor()}</span></div>
           <br/>
           <div class="info"><span class="info-label"><fmt:message key="label.price"/></span><span class="info-value">${item.getPrice()}</span></div>
+          <br/>
+          <div class="info"><span class="info-value"><fmt:message key="${item.status.name}"/></span></div>
         </div>
         <button class="read-more"><a href="${pageContext.request.contextPath}/controller?command=view_item&id=${item.getId()}&lastPage=${currentPage}&dir=${dir}"><fmt:message key="label.read.more"/></a></button>
       </div>
     </div>
     </c:forEach>
   </div>
-
   <div class="pagination">
     <c:if test="${numPages>1}">
-        <c:if test="${currentPage > 1}">
-          <button><a href="${pageContext.request.contextPath}/controller?command=catalog&type=${type}&page=${currentPage-1}&dir=${dir}"><fmt:message key="button.prev"/></a></button>
-        </c:if>
-        <c:if test="${currentPage > 2}">
-          <button><a href="${pageContext.request.contextPath}/controller?command=catalog&type=${type}&page=1&dir=${dir}"><fmt:message key="button.first"/></a></button>
-        </c:if>
-      <button class="active"><a href="${pageContext.request.contextPath}/controller?command=catalog&type=${type}&page=${currentPage}&dir=${dir}">${currentPage}</a></button>
+      <c:if test="${currentPage > 1}">
+        <button>
+          <a href="${pageContext.request.contextPath}/controller?command=catalog&type=${type}&page=${currentPage-1}&dir=${dir}">
+            <fmt:message key="button.prev"/>
+          </a>
+        </button>
+      </c:if>
+      <c:if test="${currentPage > 2}">
+        <button>
+          <a href="${pageContext.request.contextPath}/controller?command=catalog&type=${type}&page=1&dir=${dir}">
+            <fmt:message key="button.first"/>
+          </a>
+        </button>
+      </c:if>
+      <button class="active">
+        <a href="${pageContext.request.contextPath}/controller?command=catalog&type=${type}&page=${currentPage}&dir=${dir}">
+          ${currentPage}
+        </a>
+      </button>
       <c:if test="${numPages>currentPage}">
-        <button><a href="${pageContext.request.contextPath}/controller?command=catalog&type=${type}&page=${numPages}&dir=${dir}"><fmt:message key="button.next"/></a></button>
+        <button><a href="${pageContext.request.contextPath}/controller?command=catalog&type=${type}&page=${currentPage+1}&dir=${dir}"><fmt:message key="button.next"/></a></button>
         <c:if test="${numPages>currentPage+1}">
-          <button><a href="${pageContext.request.contextPath}/controller?command=catalog&type=${type}&page=${currentPage+1}&dir=${dir}"><fmt:message key="button.last"/></a></button>
+          <button>
+            <a href="${pageContext.request.contextPath}/controller?command=catalog&type=${type}&page=${numPages}&dir=${dir}">
+              <fmt:message key="button.last"/>
+            </a>
+          </button>
         </c:if>
       </c:if>
     </c:if>
   </div>
-</div>
 </div>
 </body>
 </html>

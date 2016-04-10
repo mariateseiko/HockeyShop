@@ -1,11 +1,11 @@
 package by.bsuir.hockeyshop.command.impl;
 
 import by.bsuir.hockeyshop.command.ActionCommand;
+import by.bsuir.hockeyshop.command.util.ActionResult;
 import by.bsuir.hockeyshop.entity.User;
 import by.bsuir.hockeyshop.command.CommandException;
 import by.bsuir.hockeyshop.service.ServiceException;
 import by.bsuir.hockeyshop.managers.ConfigurationManager;
-import by.bsuir.hockeyshop.managers.MessageManager;
 import by.bsuir.hockeyshop.service.UserService;
 import by.bsuir.hockeyshop.service.impl.UserServiceImpl;
 
@@ -16,13 +16,13 @@ import javax.servlet.http.HttpSession;
  * for signing in a user with given credentials
  */
 public class LoginCommand implements ActionCommand {
-    static final String PARAM_NAME_LOGIN = "login";
-    static final String PARAM_NAME_PASSWORD = "password";
-    static final String ATTR_USER = "user";
-    static final String ATTR_ERROR = "errorMessage";
-    static final String COMMAND_VIEW_PAGE = "/controller?command=view_page&page=";
-    static final UserService userService = UserServiceImpl.getInstance();
-    static final String ATTR_MESSAGE_MANAGER = "messageManager";
+    private static final String PARAM_NAME_LOGIN = "login";
+    private static final String PARAM_NAME_PASSWORD = "password";
+    private static final String ATTR_USER = "user";
+    private static final String ATTR_ERROR = "errorMessage";
+    private static final String COMMAND_VIEW_PAGE = "/controller?command=view_page&page=";
+
+    private static UserService userService = UserServiceImpl.getInstance();
 
     /**
      * Handles request to the servlet by trying to log in a user with given credentials

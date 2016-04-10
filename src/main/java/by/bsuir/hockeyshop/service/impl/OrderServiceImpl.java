@@ -13,6 +13,11 @@ import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * {@inheritDoc}
+ *
+ * A singleton implementation of the {@link OrderService} interface, using {@link OrderDaoImpl} as an underlying level
+ */
 public class OrderServiceImpl implements OrderService {
     private final OrderDao orderDao;
     private static OrderService instance = new OrderServiceImpl();
@@ -26,34 +31,23 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public List<Order> selectOrdersByUser(long userId, int offset, int limit) throws ServiceException {
+    public List<Order> selectOrdersByUser(long userId) throws ServiceException {
         try {
-            return orderDao.selectOrdersByUserId(userId, offset, limit);
+            return markLateOrders(orderDao.selectOrdersByUserId(userId));
         } catch (DaoException e) {
             throw new ServiceException(e);
         }
     }
 
     @Override
-    public List<Order> selectOrdersByUser(long userId, boolean payed, int offset, int limit) throws ServiceException {
+    public List<Order> selectOrdersByUser(long userId, boolean paid) throws ServiceException {
         List<Order> orders;
         try {
-            if (payed) {
-                orders = orderDao.selectPaidOrdersByUserId(userId, offset, limit);
+            if (paid) {
+                orders = orderDao.selectPaidOrdersByUserId(userId);
             } else {
-                orders = orderDao.selectUnpaidOrdersByUserId(userId, offset, limit);
+                orders = orderDao.selectUnpaidOrdersByUserId(userId);
             }
-        } catch (DaoException e) {
-            throw new ServiceException(e);
-        }
-        return orders;
-    }
-
-    @Override
-    public List<Order> selectAllOrders(int offset, int limit) throws ServiceException {
-        List<Order> orders;
-        try {
-            orders = orderDao.selectAllOrders(offset, limit);
         } catch (DaoException e) {
             throw new ServiceException(e);
         }
@@ -61,13 +55,24 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public List<Order> selectAllOrdersByPayment(boolean isPayed, int offset, int limit) throws ServiceException {
+    public List<Order> selectAllOrders() throws ServiceException {
+        List<Order> orders;
+        try {
+            orders = orderDao.selectAllOrders();
+        } catch (DaoException e) {
+            throw new ServiceException(e);
+        }
+        return markLateOrders(orders);
+    }
+
+    @Override
+    public List<Order> selectAllOrdersByPayment(boolean isPayed) throws ServiceException {
         List<Order> orders;
         try {
             if (isPayed) {
-                orders = orderDao.selectAllPaidOrders(offset, limit);
+                orders = orderDao.selectAllPaidOrders();
             } else {
-                orders = orderDao.selectAllUnpaidOrders(offset, limit);
+                orders = orderDao.selectAllUnpaidOrders();
             }
         } catch (DaoException e) {
             throw new ServiceException(e);
@@ -75,16 +80,6 @@ public class OrderServiceImpl implements OrderService {
         return markLateOrders(orders);
     }
 
-    private List<Order> markLateOrders(List<Order> orders) {
-        GregorianCalendar now = new GregorianCalendar();
-        now.add(Calendar.DAY_OF_MONTH, -3);
-        for (Order order: orders) {
-            if (order.getPaymentDateTime() != null) {
-                order.setLate(now.compareTo(order.getCreationDateTime()) > 0);
-            }
-        }
-        return orders;
-    }
     @Override
     public boolean submitOrder(long orderId) throws ServiceException {
         boolean result = false;
@@ -102,12 +97,12 @@ public class OrderServiceImpl implements OrderService {
     public boolean addItemsToOrder(long itemId, int count, long userId) throws ServiceException {
         try {
             Long currentOrderId = orderDao.selectCurrentOrderId(userId);
-            if (currentOrderId == null) {
+            if (currentOrderId == -1) {
                 if ((currentOrderId = orderDao.insertNewOrder(userId)) == null) {
                     return false;
                 }
             }
-            return orderDao.addItemsToOrder(itemId, count, currentOrderId);
+            return orderDao.insertItemsToOrder(itemId, count, currentOrderId);
         } catch (DaoException e) {
             throw new ServiceException(e);
         }
@@ -118,8 +113,8 @@ public class OrderServiceImpl implements OrderService {
         boolean result = false;
         try {
             Long currentOrderId = orderDao.selectCurrentOrderId(userId);
-            if (currentOrderId != null) {
-                result = orderDao.removeItemsFromOrder(itemId, currentOrderId);
+            if (currentOrderId != -1) {
+                result = orderDao.deleteItemsFromOrder(itemId, currentOrderId);
             }
         } catch (DaoException e) {
             throw new ServiceException(e);
@@ -138,12 +133,16 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public boolean deleteOrder(long orderId) throws ServiceException {
+    public boolean deleteOrder(long orderId, long userId) throws ServiceException {
+        boolean result = false;
         try {
-            return orderDao.deleteOrder(orderId);
+            if (orderDao.selectOrderOwnerId(orderId) != userId) {
+                result = orderDao.deleteOrder(orderId);
+            }
         } catch (DaoException e) {
             throw new ServiceException(e);
         }
+        return result;
     }
 
     @Override
@@ -161,7 +160,7 @@ public class OrderServiceImpl implements OrderService {
         } catch (DaoException e) {
             throw new ServiceException(e);
         }
-        return order;
+        return markLateOrder(order);
     }
 
     @Override
@@ -183,7 +182,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public Long selectOrderOwnerId(long orderId) throws ServiceException {
+    public long selectOrderOwnerId(long orderId) throws ServiceException {
         try {
             return orderDao.selectOrderOwnerId(orderId);
         } catch (DaoException e) {
@@ -198,5 +197,25 @@ public class OrderServiceImpl implements OrderService {
         } catch (DaoException e) {
             throw new ServiceException(e);
         }
+    }
+
+    private List<Order> markLateOrders(List<Order> orders) {
+        GregorianCalendar now = new GregorianCalendar();
+        now.add(Calendar.DAY_OF_MONTH, -3);
+        for (Order order: orders) {
+            if (order.getPaymentDateTime() == null) {
+                order.setLate(now.compareTo(order.getCreationDateTime()) > 0);
+            }
+        }
+        return orders;
+    }
+
+    private Order markLateOrder(Order order) {
+        GregorianCalendar now = new GregorianCalendar();
+        now.add(Calendar.DAY_OF_MONTH, -3);
+        if (order.getPaymentDateTime() == null) {
+            order.setLate(now.compareTo(order.getCreationDateTime()) > 0);
+        }
+        return order;
     }
 }

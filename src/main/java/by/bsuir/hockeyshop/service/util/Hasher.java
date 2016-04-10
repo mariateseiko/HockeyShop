@@ -1,4 +1,4 @@
-package by.bsuir.hockeyshop.util;
+package by.bsuir.hockeyshop.service.util;
 
 import org.apache.log4j.Logger;
 

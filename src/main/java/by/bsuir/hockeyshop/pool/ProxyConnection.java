@@ -1,22 +1,45 @@
 package by.bsuir.hockeyshop.pool;
 
+import org.apache.log4j.Logger;
+
 import java.sql.*;
 import java.util.Map;
 import java.util.Properties;
 import java.util.concurrent.Executor;
 
+/**
+ * A package-visible wrapper for class {@link Connection}. Used for security purposes in {@link ConnectionPool}.
+ */
 class ProxyConnection implements Connection {
     private Connection connection;
+    final static Logger LOG = Logger.getLogger(ProxyConnection.class);
+
     ProxyConnection(Connection connection) {
         this.connection = connection;
     }
+
+    /**
+     * Actually closes the connection
+     * @throws SQLException if a database access error occurs
+     */
     void destroy() throws SQLException{
         connection.close();
     }
 
+    /**
+     * Instead of closing the connection, returns it to its initial state and returns it to the connection pool.
+     */
     @Override
     public void close() {
-        ConnectionPool.getInstance().returnConnection(this);
+        try {
+            if (!getAutoCommit()){
+                rollback();
+                setAutoCommit(true);
+            }
+            ConnectionPool.getInstance().returnConnection(this);
+        } catch (SQLException e) {
+            LOG.error("Failed to return connection to pool", e);
+        }
     }
     @Override
     public Statement createStatement() throws SQLException {
@@ -156,12 +179,12 @@ class ProxyConnection implements Connection {
 
     @Override
     public void rollback(Savepoint savepoint) throws SQLException {
-
+        connection.rollback(savepoint);
     }
 
     @Override
     public void releaseSavepoint(Savepoint savepoint) throws SQLException {
-
+        connection.releaseSavepoint(savepoint);
     }
 
     @Override
@@ -246,41 +269,41 @@ class ProxyConnection implements Connection {
 
     @Override
     public Struct createStruct(String typeName, Object[] attributes) throws SQLException {
-        return null;
+        return connection.createStruct(typeName, attributes);
     }
 
     @Override
     public void setSchema(String schema) throws SQLException {
-
+        connection.setSchema(schema);
     }
 
     @Override
     public String getSchema() throws SQLException {
-        return null;
+        return connection.getSchema();
     }
 
     @Override
     public void abort(Executor executor) throws SQLException {
-
+        connection.abort(executor);
     }
 
     @Override
     public void setNetworkTimeout(Executor executor, int milliseconds) throws SQLException {
-
+        connection.setNetworkTimeout(executor, milliseconds);
     }
 
     @Override
     public int getNetworkTimeout() throws SQLException {
-        return 0;
+        return connection.getNetworkTimeout();
     }
 
     @Override
     public <T> T unwrap(Class<T> iface) throws SQLException {
-        return null;
+        return connection.unwrap(iface);
     }
 
     @Override
     public boolean isWrapperFor(Class<?> iface) throws SQLException {
-        return false;
+        return connection.isWrapperFor(iface);
     }
-    }
+}

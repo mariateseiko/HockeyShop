@@ -7,7 +7,7 @@
         </layout>
     </appender>
     <appender name="File" class="org.apache.log4j.RollingFileAppender">
-        <param name="File" value="${catalina.base}/logs/logs.log" />
+        <param name="File" value="C:/logs/logs.log" />
         <param name="MaxFileSize" value="10KB"/>
         <param name="MaxBackupIndex" value="5"/>
         <layout class="org.apache.log4j.PatternLayout" >

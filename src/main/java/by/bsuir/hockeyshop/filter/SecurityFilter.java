@@ -7,16 +7,19 @@ import by.bsuir.hockeyshop.entity.UserRole;
 import javax.servlet.*;
 import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 /**
  * Filters all requests to the servlet by checking whether the user has corresponding rights to execute
- * a specified command. If rights are insufficient, request is forwarded to the index page.
+ * a specified command and whether request method is appropriate for the command.
+ * If rights are insufficient, request is redirected to the index page.
  */
 @WebFilter(urlPatterns = {"/controller"})
 public class SecurityFilter implements Filter {
-    static final String COMMAND = "command";
-    static final String ATTR_USER = "user";
+    private static final String COMMAND = "command";
+    private static final String ATTR_USER = "user";
+    private static final String INDEX = "/index.jsp";
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
 
@@ -24,7 +27,7 @@ public class SecurityFilter implements Filter {
 
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
-
+        HttpServletResponse response = (HttpServletResponse)servletResponse;
         HttpServletRequest request = (HttpServletRequest)servletRequest;
         User user = (User)request.getSession().getAttribute(ATTR_USER);
         UserRole role;
@@ -37,14 +40,13 @@ public class SecurityFilter implements Filter {
         if (action != null) {
             try {
                 CommandName commandName = CommandName.valueOf(action.toUpperCase());
-                if (!commandName.isRoleAllowed(role)) {
-                    RequestDispatcher dispatcher = request.getServletContext().getRequestDispatcher("/index.jsp");
-                    dispatcher.forward(servletRequest, servletResponse);
+                if (!commandName.isRoleAllowed(role)
+                        || !commandName.getRequestType().toString().equalsIgnoreCase(request.getMethod())) {
+                    response.sendRedirect(request.getContextPath() + INDEX);
                     return;
                 }
             } catch (IllegalArgumentException e) {
-                RequestDispatcher dispatcher = request.getServletContext().getRequestDispatcher("/index.jsp");
-                dispatcher.forward(servletRequest, servletResponse);
+                response.sendRedirect(request.getContextPath() + INDEX);
                 return;
             }
         }

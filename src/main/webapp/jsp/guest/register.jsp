@@ -9,6 +9,11 @@
 </head>
 <body >
 <div id="login_back">
+  <header style="background-color: rgba(0,0,0,0.8)">
+    <div class="heading" >
+      <a style="text-decoration: initial" href="${pageContext.request.contextPath}/index.jsp"><h2>Hockey<span>Corner</span></h2></a>
+    </div>
+  </header>
   <div class="cover">
     <div class="popupContainer" id="register_container">
       <header class="popupHeader">
@@ -19,7 +24,7 @@
           <form method="post" action="${pageContext.request.contextPath}/controller">
             <label><fmt:message key="label.login"/>*</label>
             <fmt:message key="message.invalid.login" var="invalidLogin"/>
-            <input type="text" name="login" required pattern="[A-z]\w{4,14}"
+            <input type="text" name="login" required pattern="^[A-z]\w{3,14}$"
                    oninvalid="this.setCustomValidity('${invalidLogin}')"
                    oninput="setCustomValidity('')"/>
             <br/>
@@ -28,7 +33,7 @@
             <br/>
             <label><fmt:message key="label.password"/>*</label>
             <fmt:message key="message.invalid.password" var="invalidPassword"/>
-            <input type="password" name="password" required
+            <input type="password" name="password" required pattern="^[A-z0-9]\w{5,19}$"
                     oninvalid="this.setCustomValidity('${invalidPassword}')"
                     oninput="setCustomValidity('')"/>
             <br/>

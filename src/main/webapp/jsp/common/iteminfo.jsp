@@ -43,63 +43,70 @@
   <div class="item-container">
     <div class="item-wrapper-big">
       <div class="item">
-        <div class="item-name">${item.getName()} </div>
+        <div class="item-name"><c:out value="${item.getName()}"/></div>
         <img src="${pageContext.request.contextPath}/${item.imagePath}" class="item-image-big" />
         <div class="item-info">
           <div class="info">
             <span class="info-label"><fmt:message key="label.size"/></span>
-            <span class="info-value">${item.getSize()}</span></div>
+            <span class="info-value"><c:out value="${item.getSize()}"/></span></div>
           <br/>
           <div class="info">
             <span class="info-label"><fmt:message key="label.color"/></span>
-            <span class="info-value">${item.getColor()}</span></div>
+            <span class="info-value"><c:out value="${item.getColor()}"/></span></div>
           <br/>
-          <div class="info"><span class="info-label"><fmt:message key="label.price"/></span><span class="info-value">${item.getPrice()}</span></div>
+          <div class="info">
+            <span class="info-label"><fmt:message key="label.price"/></span>
+            <span class="info-value"><c:out value="${item.getPrice()}"/></span>
+          </div>
           <br/>
           <c:if test="${user.getRole().toString().equalsIgnoreCase('admin')}">
-            <div class="info"><span class="info-label"><fmt:message key="label.status"/></span><span class="info-value">${item.getStatus().getName()}</span></div>
+            <div class="info"><span class="info-label"><fmt:message key="label.status"/></span>
+              <span class="info-value">
+                <fmt:message key="${item.getStatus().getName()}"/>
+              </span>
+            </div>
             <br/>
           </c:if>
           <c:if test="${not empty item.getAdditionalInfo()}">
-          <div class="info"><span class="info-label"><fmt:message key="label.additional"/></span><span class="info-value">${item.getAdditionalInfo()}</span></div>
+          <div class="info" >
+            <span class="info-label-desc"><fmt:message key="label.additional"/></span><br/>
+            <span id="desc"><c:out value="${item.getAdditionalInfo()}"/></span></div>
           <br/>
           </c:if>
           <c:if test="${not empty item.getDescription()}">
           <div class="info"><span class="info-label-desc"><fmt:message key="label.description"/></span>
-            <br/><span class="info-value" id="desc">${item.getDescription()}</span></div>
+            <br/><span class="info-value" id="desc">
+              <c:out value="${item.getDescription()}"/>
+            </span></div>
           <br/>
           </c:if>
         </div>
-
-          <c:if test="${user.getRole().toString().equalsIgnoreCase('client')}">
-        <form method="post" action="${pageContext.request.contextPath}/controller">
-
-        <div class="number">
-              <span class="quant"><fmt:message key="label.quantity"/></span>
-              <button type="button" class="minus" ng-click="dec()">-</button>
-              <input class="q-input" name="count" type="text" value="{{count}}" readonly/>
-              <button type="button" class="plus" ng-click="inc()">+</button>
-          <input type="hidden" name="id" value="${item.getId()}"/>
-              <button id="add" type="submit" name="command" value="add_to_order">
-                <fmt:message key="label.add.to.order"/>
-              </button>
-            </div>
-        </form>
-          </c:if>
-          <c:if test="${user.getRole().toString().equalsIgnoreCase('admin')}">
-            <div class="number">
-              <button class="bottom" ng-click="showUpdatePrice=!showUpdatePrice; showUpdateStatus=false">
-                <fmt:message key="label.action.update.price"/>
-              </button>
-              <button class="bottom" ng-click="showUpdateStatus=!showUpdateStatus; showUpdatePrice=false">
-                <fmt:message key="label.action.update.status"/>
-              </button>
-            </div>
-          </c:if>
-
+        <c:if test="${user.role.toString().equalsIgnoreCase('client') && item.status.toString().equalsIgnoreCase('IN_STOCK')}">
+          <form method="post" action="${pageContext.request.contextPath}/controller">
+          <div class="number">
+                <span class="quant"><fmt:message key="label.quantity"/></span>
+                <button type="button" class="minus" ng-click="dec()">-</button>
+                <input class="q-input" name="count" type="text" value="{{count}}" readonly/>
+                <button type="button" class="plus" ng-click="inc()">+</button>
+            <input type="hidden" name="id" value="${item.getId()}"/>
+                <button id="add" type="submit" name="command" value="add_to_order">
+                  <fmt:message key="label.add.to.order"/>
+                </button>
+              </div>
+          </form>
+        </c:if>
+        <c:if test="${user.getRole().toString().equalsIgnoreCase('admin')}">
+          <div class="number">
+            <button class="bottom" ng-click="showUpdatePrice=!showUpdatePrice; showUpdateStatus=false">
+              <fmt:message key="label.action.update.price"/>
+            </button>
+            <button class="bottom" ng-click="showUpdateStatus=!showUpdateStatus; showUpdatePrice=false">
+              <fmt:message key="label.action.update.status"/>
+            </button>
+          </div>
+        </c:if>
       </div>
     </div>
-
     <div class="form_container" ng-show="showUpdatePrice">
       <form method="post" action="${pageContext.request.contextPath}/controller" enctype="multipart/form-data" class="input-form center">
         <label><fmt:message key="label.new.price"/></label>
