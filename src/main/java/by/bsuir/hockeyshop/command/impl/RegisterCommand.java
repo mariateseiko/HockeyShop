@@ -3,6 +3,7 @@ package by.bsuir.hockeyshop.command.impl;
 import by.bsuir.hockeyshop.command.ActionCommand;
 import by.bsuir.hockeyshop.command.CommandException;
 import by.bsuir.hockeyshop.command.util.ActionResult;
+import by.bsuir.hockeyshop.command.util.AllowedPage;
 import by.bsuir.hockeyshop.entity.User;
 import by.bsuir.hockeyshop.service.ServiceException;
 import by.bsuir.hockeyshop.managers.ConfigurationManager;
@@ -43,18 +44,18 @@ public class RegisterCommand implements ActionCommand {
             try {
                 if (userService.registerUser(login, pass, email)) {
                     request.getSession().setAttribute(ATTR_SUCCESS, ActionResult.REGISTER);
-                    page = COMMAND_VIEW_PAGE + ConfigurationManager.getProperty("path.page.login");
+                    page = COMMAND_VIEW_PAGE + AllowedPage.LOGIN;
 
                 } else {
                     request.getSession().setAttribute(ATTR_ERROR, ActionResult.REGISTER);
-                    page = COMMAND_VIEW_PAGE + ConfigurationManager.getProperty("path.page.register");
+                    page = COMMAND_VIEW_PAGE + AllowedPage.REGISTER;
                 }
             } catch (ServiceException e) {
                 throw new CommandException(e);
             }
         } else {
             request.getSession().setAttribute(ATTR_ERROR, ActionResult.REGISTER_VALIDATED);
-            page = COMMAND_VIEW_PAGE + ConfigurationManager.getProperty("path.page.register");
+            page = COMMAND_VIEW_PAGE + AllowedPage.REGISTER;
         }
         return page;
     }

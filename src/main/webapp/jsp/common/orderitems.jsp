@@ -93,7 +93,6 @@
       <c:choose>
         <c:when test="${items.size()>0 && empty creationDate && user.role.toString().equalsIgnoreCase('client')}">
         <form method="post" action="${pageContext.request.contextPath}/controller">
-        <div>${id}</div>
           <input type="hidden" name="id" value="${id}"/>
           <button type="submit" name="command" value="submit_order"><fmt:message key="button.order.submit"/></button>
         </form>
@@ -102,7 +101,6 @@
           <c:if test="${user.role.toString().equalsIgnoreCase('client')}">
           <button ng-click="paymentClick()"><fmt:message key="button.order.pay"/></button>
           </c:if>
-          ${late}
           <c:if test="${user.role.toString().equals('ADMIN') && late || user.role.toString().equals('CLIENT')}">
             <form method="post" action="${pageContext.request.contextPath}/controller" style="display: inline">
             <input type="hidden" name="id" value="${id}"/>

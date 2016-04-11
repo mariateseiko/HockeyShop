@@ -2,6 +2,7 @@ package by.bsuir.hockeyshop.command.impl;
 
 import by.bsuir.hockeyshop.command.ActionCommand;
 import by.bsuir.hockeyshop.command.util.ActionResult;
+import by.bsuir.hockeyshop.command.util.AllowedPage;
 import by.bsuir.hockeyshop.entity.Item;
 import by.bsuir.hockeyshop.entity.ItemStatus;
 import by.bsuir.hockeyshop.entity.ItemType;
@@ -75,7 +76,7 @@ public class NewItemCommand implements ActionCommand {
             } else {
                 request.getSession().setAttribute(ATTR_ERROR, ActionResult.VALIDATION_FAILED);
             }
-            page = COMMAND_VIEW_PAGE + ConfigurationManager.getProperty("path.page.admin.newitem");
+            page = COMMAND_VIEW_PAGE + AllowedPage.NEW_ITEM;
         } catch (ServletException | IOException e) {
             throw new CommandException("Failed to process image file part", e);
         } catch (ServiceException e) {

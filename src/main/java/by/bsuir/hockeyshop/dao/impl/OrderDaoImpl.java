@@ -56,7 +56,7 @@ public class OrderDaoImpl implements OrderDao {
             "JOIN item ON order_item.item_id = item.item_id " +
             "JOIN item_price ON item.item_id = item_price.item_id AND order_item.add_date BETWEEN item_price.starts AND item_price.ends " +
             "JOIN user ON `order`.user_id = `user`.user_id " +
-            "WHERE `order`.user_id=? " +
+            "WHERE `order`.user_id=? AND creation_date IS NOT NULL " +
             "GROUP BY `order`.order_id " +
             "ORDER BY creation_date DESC ";
     private static final String SELECT_UNPAID_ORDERS_BY_USER_ID = "SELECT `order`.order_id,  " +
@@ -67,7 +67,7 @@ public class OrderDaoImpl implements OrderDao {
             "JOIN item on order_item.item_id = item.item_id " +
             "JOIN item_price ON item.item_id = item_price.item_id AND order_item.add_date BETWEEN item_price.starts AND item_price.ends " +
             "JOIN user ON `order`.user_id = `user`.user_id " +
-            "WHERE `order`.user_id=? AND payment_date IS NULL " +
+            "WHERE `order`.user_id=? AND payment_date IS NULL AND creation_date IS NOT NULL " +
             "GROUP BY `order`.order_id " +
             "ORDER BY creation_date DESC ";
     private static final String SELECT_PAID_ORDERS_BY_USER_ID = "SELECT `order`.order_id,  " +
@@ -78,7 +78,7 @@ public class OrderDaoImpl implements OrderDao {
             "JOIN item on order_item.item_id = item.item_id " +
             "JOIN item_price ON item.item_id = item_price.item_id AND order_item.add_date BETWEEN item_price.starts AND item_price.ends " +
             "JOIN user ON `order`.user_id = `user`.user_id " +
-            "WHERE `order`.user_id=? AND payment_date IS NOT NULL " +
+            "WHERE `order`.user_id=? AND payment_date IS NOT NULL AND creation_date IS NOT NULL " +
             "GROUP BY `order`.order_id " +
             "ORDER BY creation_date DESC ";
     private static final String INSERT_NEW_ORDER = "INSERT INTO `order` (user_id) VALUES(?)";

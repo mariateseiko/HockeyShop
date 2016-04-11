@@ -2,6 +2,7 @@ package by.bsuir.hockeyshop.command.impl;
 
 import by.bsuir.hockeyshop.command.ActionCommand;
 import by.bsuir.hockeyshop.command.util.ActionResult;
+import by.bsuir.hockeyshop.command.util.AllowedPage;
 import by.bsuir.hockeyshop.entity.User;
 import by.bsuir.hockeyshop.command.CommandException;
 import by.bsuir.hockeyshop.service.ServiceException;
@@ -47,7 +48,7 @@ public class LoginCommand implements ActionCommand {
                 }
             } else {
                 request.getSession().setAttribute(ATTR_ERROR, ActionResult.LOGIN);
-                page = COMMAND_VIEW_PAGE + ConfigurationManager.getProperty("path.page.login");
+                page = COMMAND_VIEW_PAGE + AllowedPage.LOGIN;
             }
         } catch (ServiceException e) {
             throw new CommandException(e);

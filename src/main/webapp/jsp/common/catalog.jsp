@@ -61,18 +61,18 @@
     </c:forEach>
   </div>
   <div class="pagination">
+    <c:if test="${currentPage > 2}">
+      <button>
+        <a href="${pageContext.request.contextPath}/controller?command=catalog&type=${type}&page=1&dir=${dir}">
+          <fmt:message key="button.first"/>
+        </a>
+      </button>
+    </c:if>
     <c:if test="${numPages>1}">
       <c:if test="${currentPage > 1}">
         <button>
           <a href="${pageContext.request.contextPath}/controller?command=catalog&type=${type}&page=${currentPage-1}&dir=${dir}">
             <fmt:message key="button.prev"/>
-          </a>
-        </button>
-      </c:if>
-      <c:if test="${currentPage > 2}">
-        <button>
-          <a href="${pageContext.request.contextPath}/controller?command=catalog&type=${type}&page=1&dir=${dir}">
-            <fmt:message key="button.first"/>
           </a>
         </button>
       </c:if>

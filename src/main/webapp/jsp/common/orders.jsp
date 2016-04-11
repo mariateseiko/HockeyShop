@@ -20,20 +20,20 @@
   <div class="item-container" style="background-color: white">
     <table class="orders">
       <c:if test="${not empty orders}">
-      <tr class="headings">
-        <td><fmt:message key="label.order.id"/></td>
-        <c:if test="${user.role.toString().equalsIgnoreCase('admin') && param.command.equalsIgnoreCase('view_all_orders')}">
-          <td><fmt:message key="label.user"/></td>
-        </c:if>
-        <td><fmt:message key="label.creation.date"/></td>
-        <td><fmt:message key="label.payment.date"/></td>
-        <td><fmt:message key="label.quantity"/></td>
-        <td><fmt:message key="label.total.price"/></td>
-        <td></td>
-        <c:if test="${user.role.toString().equalsIgnoreCase('admin')}">
+        <tr class="headings">
+          <td><fmt:message key="label.order.id"/></td>
+          <c:if test="${user.role.toString().equalsIgnoreCase('admin') && param.command.equalsIgnoreCase('view_all_orders')}">
+            <td><fmt:message key="label.user"/></td>
+          </c:if>
+          <td><fmt:message key="label.creation.date"/></td>
+          <td><fmt:message key="label.payment.date"/></td>
+          <td><fmt:message key="label.quantity"/></td>
+          <td><fmt:message key="label.total.price"/></td>
           <td></td>
-        </c:if>
-      </tr>
+          <c:if test="${user.role.toString().equalsIgnoreCase('admin')}">
+            <td></td>
+          </c:if>
+        </tr>
       </c:if>
       <c:if test="${empty orders}">
         <span><h4 style="color:#04b5d4; background-color: #212121"><fmt:message key="message.no.orders"/></h4></span>

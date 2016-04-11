@@ -136,7 +136,7 @@ public class OrderServiceImpl implements OrderService {
     public boolean deleteOrder(long orderId, long userId) throws ServiceException {
         boolean result = false;
         try {
-            if (orderDao.selectOrderOwnerId(orderId) != userId) {
+            if (orderDao.selectOrderOwnerId(orderId) == userId) {
                 result = orderDao.deleteOrder(orderId);
             }
         } catch (DaoException e) {
