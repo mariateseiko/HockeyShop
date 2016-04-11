@@ -29,14 +29,14 @@ public class ItemDaoImpl implements ItemDao {
             "FROM item " +
             "JOIN item_type ON item.type_id = item_type.type_id " +
             "JOIN item_status ON item.status_id = item_status.status_id " +
-            "JOIN item_price ON item.item_id = item_price.item_id AND now() <= item_price.ends " +
+            "JOIN item_price ON item.item_id = item_price.item_id AND now() < item_price.ends " +
             "WHERE item_type.name = ? ORDER BY price DESC LIMIT ?, ?";
     private static final String SELECT_ITEMS_BY_TYPE_ORDER_BY_PRICE_ASC = "SELECT item.item_id, item.name, item_status.name AS `status`, " +
             "size, color, item_price.price, image_path " +
             "FROM item " +
             "JOIN item_status ON item.status_id = item_status.status_id " +
             "JOIN item_type ON item.type_id = item_type.type_id " +
-            "JOIN item_price ON item.item_id = item_price.item_id AND now() <= item_price.ends " +
+            "JOIN item_price ON item.item_id = item_price.item_id AND now() < item_price.ends " +
             "WHERE item_type.name = ? ORDER BY price ASC LIMIT ?, ?";
     private static final String SELECT_ITEMS_COUNT_BY_TYPE = "SELECT COUNT(item_id) AS count " +
             "FROM item " +
@@ -59,7 +59,7 @@ public class ItemDaoImpl implements ItemDao {
             "additional_info, description " +
             "FROM item " +
             "JOIN item_type ON item.type_id = item_type.type_id "+
-            "JOIN item_price ON item.item_id = item_price.item_id AND now() <= item_price.ends " +
+            "JOIN item_price ON item.item_id = item_price.item_id AND now() < item_price.ends " +
             "JOIN item_status ON item.status_id = item_status.status_id " +
             "WHERE item.item_id = ?";
 
@@ -219,23 +219,25 @@ public class ItemDaoImpl implements ItemDao {
 
     @Override
     public Item selectItemById(long id) throws DaoException {
-        Item item = new Item();
+        Item item = null;
         try(Connection cn = ConnectionPool.getInstance().takeConnection();
             PreparedStatement st = cn.prepareStatement(SELECT_ITEM_BY_ID)) {
             st.setLong(1, id);
             ResultSet resultSet = st.executeQuery();
-            resultSet.next();
-            item.setId(Long.parseLong(resultSet.getString("item_id")));
-            item.setName(resultSet.getString("name"));
-            item.setSize(resultSet.getString("size"));
-            item.setColor(resultSet.getString("color"));
-            item.setPrice(resultSet.getInt("price"));
-            item.setStatus(ItemStatus.valueOf(resultSet.getString("status")));
-            item.setType(ItemType.valueOf(resultSet.getString("type")));
-            item.setImagePath(ConfigurationManager.getProperty("path.items")
-                    + File.separator+resultSet.getString("image_path"));
-            item.setAdditionalInfo(resultSet.getString("additional_info"));
-            item.setDescription(resultSet.getString("description"));
+            if (resultSet.next()) {
+                item = new Item();
+                item.setId(Long.parseLong(resultSet.getString("item_id")));
+                item.setName(resultSet.getString("name"));
+                item.setSize(resultSet.getString("size"));
+                item.setColor(resultSet.getString("color"));
+                item.setPrice(resultSet.getInt("price"));
+                item.setStatus(ItemStatus.valueOf(resultSet.getString("status")));
+                item.setType(ItemType.valueOf(resultSet.getString("type")));
+                item.setImagePath(ConfigurationManager.getProperty("path.items")
+                        + File.separator + resultSet.getString("image_path"));
+                item.setAdditionalInfo(resultSet.getString("additional_info"));
+                item.setDescription(resultSet.getString("description"));
+            }
         } catch (SQLException e) {
             throw new DaoException("Request to database failed", e);
         }

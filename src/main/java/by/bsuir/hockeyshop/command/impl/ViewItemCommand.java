@@ -45,11 +45,11 @@ public class ViewItemCommand implements ActionCommand {
                 request.setAttribute(PARAM_LAST_PAGE, lastPage);
                 request.setAttribute(PARAM_DIRECTION, dir);
                 MessageAdder.addMessage(request);
-                page = ConfigurationManager.getProperty("path.page.item");
             } else {
                 MessageManager messageManager = (MessageManager)(request.getSession().getAttribute(ATTR_MESSAGE_MANAGER));
                 request.setAttribute(ATTR_ERROR, messageManager.getProperty("message.item.not.found"));
             }
+            page = ConfigurationManager.getProperty("path.page.item");
         } catch (ServiceException e) {
 
             throw new CommandException(e);

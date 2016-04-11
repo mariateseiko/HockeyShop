@@ -15,7 +15,6 @@
 <body ng-app="showApp">
 <ctg:userheader/>
 <div class="about" id="catalog">
-
   <div class="error_message">${successMessage}${errorMessage}${successRemove}</div>
   <c:import url="/jsp/admin/ordersMenu.jsp"/>
   <div class="item-container">
@@ -32,12 +31,12 @@
       </tr>
       <c:forEach var="appUser" items="${users}">
         <tr>
-          <td>${appUser.getId()}</td>
-          <td>${appUser.getLogin()}</td>
-          <td>${appUser.getCountOfSubmittedOrders()}</td>
-          <td>${appUser.getCountOfPaidOrders()}</td>
-          <td>${appUser.getCountOfUnpaidOrders()}</td>
-          <td>${appUser.getCountOfLateOrders()}</td>
+          <td>${appUser.id}</td>
+          <td>${appUser.login}</td>
+          <td>${appUser.countOfSubmittedOrders}</td>
+          <td>${appUser.countOfPaidOrders}</td>
+          <td>${appUser.countOfUnpaidOrders}</td>
+          <td>${appUser.countOfLateOrders}</td>
           <td>
             <button>
               <a href="${pageContext.request.contextPath}/controller?command=view_user&id=${appUser.getId()}">
@@ -46,7 +45,7 @@
             </button>
           </td>
           <td>
-            <c:if test="${appUser.getCountOfLateOrders() > 0 && !appUser.isBanned()}">
+            <c:if test="${appUser.countOfLateOrders > 0 && !appUser.isBanned()}">
               <form method="post" action="${pageContext.request.contextPath}/controller" >
                 <input type="hidden" name="id" value="${appUser.id}"/>
                 <input type="hidden" name="ban" value="true"/>

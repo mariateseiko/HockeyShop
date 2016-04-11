@@ -26,7 +26,7 @@
           </li>
           <li class="cd-divider"><fmt:message key="label.modification"/></li>
           <li>
-            <a href="${pageContext.request.contextPath}/jsp/admin/additem.jsp">
+            <a href="${pageContext.request.contextPath}/controller?command=view_page&page=new_item">
               <fmt:message key="label.add.new.item"/>
             </a>
           </li>

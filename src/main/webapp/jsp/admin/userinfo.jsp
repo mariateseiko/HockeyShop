@@ -15,29 +15,8 @@
 <body  ng-app="showApp">
 <ctg:userheader/>
 <div ng-controller="mainController" class="about" id="catalog">
-  <span><h4 style="border-bottom: 1px solid white">
-    <button class="sub-menu ${empty param.type.toString() && param.command.toString().equals(command) ? 'active' : ''}">
-      <a href="${pageContext.request.contextPath}/controller?command=${command}">
-        <fmt:message key="label.orders.all"/>
-      </a>
-    </button>
-    <button class="sub-menu ${param.type.toString().equals('paid') ? 'active' : ''}">
-      <a href="${pageContext.request.contextPath}/controller?command=${command}&type=paid">
-        <fmt:message key="label.orders.paid"/>
-      </a>
-    </button>
-    <button class="sub-menu ${param.type.toString().equals('unpaid') ? 'active' : ''}">
-      <a href="${pageContext.request.contextPath}/controller?command=${command}&type=unpaid">
-        <fmt:message key="label.orders.unpaid"/>
-      </a>
-    </button>
-    <button>
-      <a href="${pageContext.request.contextPath}/controller?command=view_users_list">
-        <fmt:message key="label.all.users"/>
-      </a>
-    </button>
-</h4></span>
-  <span><h4>
+  <c:import url="/jsp/admin/ordersMenu.jsp"/>
+  <span><h4 style="margin-top: -15px">
     <button class="sub-menu">
       <a href="controller?command=view_user_orders&id=${appUser.id}&login=${appUser.login}">
         ${appUser.getLogin()}:<fmt:message key="label.orders.all"/>
@@ -88,20 +67,26 @@
         </div>
         <c:if test="${appUser.countOfLateOrders >0 && !appUser.isBanned()}">
           <div class="number">
-            <button class="bottom" ng-click="showUpdateStatus=!showUpdateStatus; showUpdatePrice=false">
-              <a href="${pageContext.request.contextPath}/controller?command=ban_user&id=${appUser.id}&ban=true">
-                <fmt:message key="label.ban.user"/>
-              </a>
-            </button>
+            <c:if test="${appUser.getCountOfLateOrders() > 0 && !appUser.isBanned()}">
+              <form method="post" action="${pageContext.request.contextPath}/controller" >
+                <input type="hidden" name="id" value="${appUser.id}"/>
+                <input type="hidden" name="ban" value="true"/>
+                <button type="submit" name="command" value="ban_user">
+                  <fmt:message key="label.ban.user"/>
+                </button>
+              </form>
+            </c:if>
           </div>
         </c:if>
         <c:if test="${appUser.isBanned()}">
           <div class="number">
-            <button class="bottom" ng-click="showUpdateStatus=!showUpdateStatus; showUpdatePrice=false">
-              <a href="${pageContext.request.contextPath}/controller?command=ban_user&id=${appUser.id}&ban=false">
+            <form method="post" action="${pageContext.request.contextPath}/controller" >
+              <input type="hidden" name="id" value="${appUser.id}"/>
+              <input type="hidden" name="ban" value="false"/>
+              <button type="submit" name="command" value="ban_user">
                 <fmt:message key="button.unban"/>
-              </a>
-            </button>
+              </button>
+            </form>
           </div>
         </c:if>
       </div>

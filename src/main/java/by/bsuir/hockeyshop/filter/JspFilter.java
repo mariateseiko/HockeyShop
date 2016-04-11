@@ -11,7 +11,7 @@ import java.io.IOException;
  * Filters all requests to the servlet by checking whether the encoding matches the encoding specified in the init params
  * of the filter. If n
  */
-@WebFilter(urlPatterns = {"/jsp/common/*", "/jsp/error/*", "/jsp/header/*", "/jsp/admin/*"})
+@WebFilter(urlPatterns = {"/jsp/common/*", "/jsp/guest/*", "/jsp/header/*", "/jsp/admin/*"})
 public class JspFilter implements Filter {
     private static final String INDEX = "/index.jsp";
 

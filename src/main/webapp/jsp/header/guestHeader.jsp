@@ -32,7 +32,7 @@
       <button class="dropdown-button ${sessionScope.locale.toString().equals('ru_RU') ? 'active' : ''} locale">
         <a href="${pageContext.request.contextPath}/controller?command=change_locale&locale=ru">RU</a>
       </button>
-      <button class="dropdown-button guest-button"><a href="${pageContext.request.contextPath}/jsp/guest/register.jsp"><fmt:message key="label.menu.signup"/></a></button>
+      <button class="dropdown-button guest-button"><a href="${pageContext.request.contextPath}/controller?command=view_page&page=register"><fmt:message key="label.menu.signup"/></a></button>
     </div>
     <div class="heading">
       <a href="${pageContext.request.contextPath}/index.jsp"><h2>Hockey<span>Corner</span></h2></a>
@@ -43,7 +43,7 @@
         <span><fmt:message key="label.header.first"/></span>
         <br>
         <span><fmt:message key="label.header.second"/></span><br>
-        <a href="${pageContext.request.contextPath}/jsp/guest/login.jsp">
+        <a href="${pageContext.request.contextPath}/controller?command=view_page&page=login">
           <button style="margin-top: 4px">
             <fmt:message key="guest.button.center"/>
           </button>
