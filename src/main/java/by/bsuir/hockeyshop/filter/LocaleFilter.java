@@ -16,8 +16,8 @@ import java.util.Locale;
  */
 @WebFilter(urlPatterns = {"/*"})
 public class LocaleFilter implements Filter {
-    static final String ATTR_MESSAGE_MANAGER = "messageManager";
-    static final String ATTR_LOCALE = "locale";
+    private static final String ATTR_MESSAGE_MANAGER = "messageManager";
+    private static final String ATTR_LOCALE = "locale";
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
     }

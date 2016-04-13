@@ -109,7 +109,6 @@ public class ConnectionPool {
      * Shuts down the pool. Marks the pool as closed, waits for a second for all connections to return and then tries
      * to close them all.
      */
-    @PreDestroy
     public void closePool()  {
         LOG.debug("Closing pool, pool size is " + pool.size());
         isClosed.set(true);

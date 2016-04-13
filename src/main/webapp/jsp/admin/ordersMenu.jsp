@@ -29,13 +29,6 @@
       <fmt:message key="label.orders.unpaid"/>
     </a>
   </button>
-  <c:if test="${user.getRole().toString().equalsIgnoreCase('client')}">
-  <button class="${param.command.toString().equals('view_order_items') ? 'active' : ''}">
-    <a href="${pageContext.request.contextPath}/controller?command=view_order_items">
-      <fmt:message key="label.order.current"/>
-    </a>
-  </button>
-  </c:if>
   <c:if test="${user.role.toString().equals('ADMIN')}">
     <button class="${param.command.toString().equals('view_users_list') ? 'active' : ''}">
       <a href="${pageContext.request.contextPath}/controller?command=view_users_list">

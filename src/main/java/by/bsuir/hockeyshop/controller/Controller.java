@@ -73,5 +73,10 @@ public class Controller extends HttpServlet {
             resp.sendError(500);
         }
     }
+
+    @Override
+    public void destroy()  {
+        ConnectionPool.getInstance().closePool();
+    }
 }
 

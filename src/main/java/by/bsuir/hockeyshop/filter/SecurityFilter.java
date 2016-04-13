@@ -22,7 +22,6 @@ public class SecurityFilter implements Filter {
     private static final String INDEX = "/index.jsp";
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
-
     }
 
     @Override
